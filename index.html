@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Log In</title>
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
     <div class="container">
@@ -33,6 +34,7 @@
       const updateBtn = document.getElementById("update-btn");
       const deleteBtn = document.getElementById("delete-btn");
       const notification = document.getElementById("notification");
+      const usernameMessage = document.getElementById("username-message");
 
       function getBody() {
         const username = document.getElementById("username").value;
@@ -41,9 +43,9 @@
       }
 
       //generic function to fetch data from the server
-      function fetchData(url, body) {
+      function fetchData(url, body, method = "POST") {
         return fetch(url, {
-          method: "POST",
+          method, // Use the method passed, default is POST
           headers: {
             "Content-Type": "application/json;charset=UTF-8",
           },
@@ -82,13 +84,15 @@
           currentUser.innerText = "";
           notification.innerText = data.error;
           notification.style.display = "block";
+          setTimeout(() => {
+            notification.style.display = "none";
+          }, 3000);
         }
       });
 
       //register button event listener
       registerBtn.addEventListener("click", async () => {
         const body = getBody();
-        const usernameMessage = document.getElementById("username-message");
 
         try {
           const response = await fetchData(
@@ -99,6 +103,7 @@
           if (response.ok) {
             const data = await response.json();
             usernameMessage.innerText = data.message;
+            fetchUsers(); // 更新用户列表
           } else {
             const errorData = await response.json();
             usernameMessage.innerText = errorData.error;
@@ -106,6 +111,55 @@
         } catch (error) {
           console.error("Network or server error", error);
         }
+      });
+
+      // 更新按钮事件监听
+      updateBtn.addEventListener("click", async () => {
+        const newUsername = prompt("Enter new username:");
+        const newPassword = prompt("Enter new password:");
+
+        if (!newUsername && !newPassword) {
+          alert("At least one field is required to update.");
+          return;
+        }
+
+        const currentUsername = document.getElementById("username").value;
+        const password = document.getElementById("password").value; // 获取当前密码
+        const body = { password, newUsername, newPassword }; // 添加当前密码以验证
+        const response = await fetchData(
+          `http://localhost:8080/users/${currentUsername}`,
+          body,
+          "PUT"
+        ); // 直接传递 username
+
+        const data = await response.json();
+        notification.innerText = data.message || data.error;
+        notification.style.display = "block";
+        fetchUsers(); // 更新用户列表
+      });
+
+      //delete button event listener
+      deleteBtn.addEventListener("click", async () => {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+
+        if (!username || !password) {
+          alert("Both username and password are required.");
+          return;
+        }
+
+        const body = { password }; // Only send the password for verification
+        const response = await fetchData(
+          `http://localhost:8080/users/${username}`,
+          body,
+          "DELETE" // Use DELETE method
+        );
+
+        const data = await response.json();
+        notification.innerText = data.message || data.error;
+        notification.style.display = "block";
+        currentUsername.innerText = "";
+        fetchUsers(); // Update the list of users
       });
     </script>
   </body>

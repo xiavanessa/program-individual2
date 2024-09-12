@@ -2,6 +2,7 @@ const express = require("express");
 const path = require("path");
 const app = express();
 const { Sequelize, DataTypes } = require("sequelize");
+const bcrypt = require("bcrypt");
 
 const port = 8080;
 
@@ -38,13 +39,14 @@ app.post("/register", async (req, res) => {
   }
 
   try {
-    const user = await User.create({ username, password });
-    res.status(201).json({ message: "User registered successfully." }); // 返回 JSON 响应
+    // Hash the password before saving it
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = await User.create({ username, password: hashedPassword });
+    res.status(201).json({ message: "User registered successfully." });
   } catch (error) {
     console.error(error);
-    // 检查是否是唯一约束冲突导致的错误
     if (error.name === "SequelizeUniqueConstraintError") {
-      res.status(409).json({ error: "Username already exists." }); // 409 Conflict 错误
+      res.status(409).json({ error: "Username already exists." });
     } else {
       res.status(500).json({ error: "Error registering user." });
     }
@@ -62,8 +64,11 @@ app.post("/login", async (req, res) => {
   }
 
   try {
-    const user = await User.findOne({ where: { username, password } });
-    if (user) {
+    // 使用 username 查找用户
+    const user = await User.findOne({ where: { username } });
+
+    // 如果用户存在，验证密码
+    if (user && (await bcrypt.compare(password, user.password))) {
       res.json({ message: "Login successful.", username: user.username });
     } else {
       res.status(401).json({ error: "Invalid username or password." });
@@ -82,6 +87,74 @@ app.get("/users", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Error retrieving users.");
+  }
+});
+
+// 更新用户
+app.put("/users/:username", async (req, res) => {
+  const { username } = req.params;
+  const { password, newUsername, newPassword } = req.body;
+
+  if (!username || !password) {
+    return res
+      .status(400)
+      .json({ error: "Username and password are required." });
+  }
+
+  if (!newUsername && !newPassword) {
+    return res
+      .status(400)
+      .json({ error: "At least one field is required to update." });
+  }
+
+  try {
+    // 使用 username 查找用户
+    const user = await User.findOne({ where: { username } });
+
+    // 如果用户存在，验证密码
+    if (user && (await bcrypt.compare(password, user.password))) {
+      if (newUsername) {
+        user.username = newUsername;
+      }
+      if (newPassword) {
+        user.password = await bcrypt.hash(newPassword, 10);
+      }
+      await user.save();
+      res.json({ message: "User updated successfully." });
+    } else {
+      res.status(401).json({ error: "Invalid username or password." });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error updating user." });
+  }
+});
+
+// 删除用户
+app.delete("/users/:username", async (req, res) => {
+  const { username } = req.params;
+  const { password } = req.body;
+
+  if (!username || !password) {
+    return res
+      .status(400)
+      .json({ error: "Username and password are required." });
+  }
+
+  try {
+    // 使用 username 查找用户
+    const user = await User.findOne({ where: { username } });
+
+    // 如果用户存在，验证密码
+    if (user && (await bcrypt.compare(password, user.password))) {
+      await user.destroy(); // 删除用户
+      res.json({ message: "User deleted successfully." });
+    } else {
+      res.status(401).json({ error: "Invalid username or password." });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error deleting user." });
   }
 });
 
