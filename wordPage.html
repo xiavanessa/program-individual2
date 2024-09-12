@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/bootstrap.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <title>Vanessa's Swedish Learning Website</title>
+    <script src="/jquery-3.7.1.js" defer></script>
+    <script src="/bootstrap.min.js" defer></script>
+    <script src="/controller.js" defer></script>
+  </head>
+
+  <body class="wordPage--body">
+    <!--nav-->
+    <nav class="nav">
+      <img src="/img/avatar.jpg" alt="avatar" class="nav__avatar" />
+      <!-- list-inline is from BootStrap -->
+      <ul class="nav__links list-inline nav-pills">
+        <li class="nav__link"><a href="/website">Hem</a></li>
+        <li class="nav__link active"><a href="/wordpage">Ordförråd</a></li>
+        <li class="nav__link"><a href="#">Grammatik</a></li>
+        <li class="nav__link"><a href="#">Läsning</a></li>
+        <li class="nav__link"><a href="#">Lyssning</a></li>
+      </ul>
+    </nav>
+
+    <div class="container wordPage--container">
+      <div class="row wordPage--container__row">
+        <!--voc classification-->
+        <div class="col-md-2 wordPage--left">
+          <h4>Nouns (Substantiv)</h4>
+          <h4>Verbs (Verb)</h4>
+          <h4>Adjectives (Adjektiv)</h4>
+          <h4>Pronouns (Pronomen)</h4>
+          <h4>Adverbs (Adverb)</h4>
+          <h4>Prepositions (Prepositioner)</h4>
+          <h4>Numbers (Nummer) & Week (Vecka) & Month (Månad)</h4>
+          <h4>Common Phrases (Vanliga Fraser)</h4>
+          <h4>Example Sentences</h4>
+        </div>
+        <!--voc forms-->
+        <div class="col-md-10 wordPage--container--right">
+          <div class="row wordPage--container__rows">
+            <div class="col-md-1 wordPage--container--right--title">
+              Engelska
+            </div>
+            <div class="col-md-1 wordPage--container--right--title">
+              Indefinite Singular
+            </div>
+            <div class="col-md-1 wordPage--container--right--title">
+              Definite Singular
+            </div>
+            <div class="col-md-1 wordPage--container--right--title">
+              Indefinite Plural
+            </div>
+            <div class="col-md-1 wordPage--container--right--title">
+              Definite Plural
+            </div>
+            <div class="col-md-5 wordPage--container--right--title">
+              Example
+            </div>
+          </div>
+
+          <!-- Button trigger modal -->
+          <button
+            class="btn btn-xs wordPage--btn--add"
+            data-toggle="modal"
+            data-target="#myModal"
+          >
+            add
+          </button>
+
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="myModal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="myModalLabel"
+          >
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">
+                    &times;
+                  </button>
+                  <h4 class="modal-title" id="myModalLabel">Add word</h4>
+                </div>
+
+                <div class="modal-body">
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label for="engelska" class="col-md-2">Engelska</label>
+                      <div class="col-md-9">
+                        <input type="text" class="form-control" id="engelska" />
+                      </div>
+                    </div>
+                  </form>
+
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label for="indefinite--singular" class="col-md-2"
+                        >Indefinite Singular</label
+                      >
+                      <div class="col-md-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="indefinite--singular"
+                        />
+                      </div>
+                    </div>
+                  </form>
+
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label for="definite--singular" class="col-md-2"
+                        >Definite Singular</label
+                      >
+                      <div class="col-md-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="definite--singular"
+                        />
+                      </div>
+                    </div>
+                  </form>
+
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label for="indefinite--plural" class="col-md-2"
+                        >Indefinite Plural</label
+                      >
+                      <div class="col-md-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="indefinite--plural"
+                        />
+                      </div>
+                    </div>
+                  </form>
+
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label for="definite--plural" class="col-md-2"
+                        >Definite Plural</label
+                      >
+                      <div class="col-md-9">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="definite--plural"
+                        />
+                      </div>
+                    </div>
+                  </form>
+
+                  <form class="form-horizontal" role="form">
+                    <div class="form-group">
+                      <label for="example" class="col-md-2">Example</label>
+                      <div class="col-md-9">
+                        <input type="text" class="form-control" id="example" />
+                      </div>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    data-dismiss="modal"
+                  >
+                    close
+                  </button>
+                  <button type="button" class="btn btn-primary" id="add">
+                    ADD
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!--vocabulary-->
+          <pre class="pre-scrollable wordPage--scroll--container">
+            <ol class="wordPage--container--right--list">
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+              <li>
+                <input type="checkbox" class="wordPage--container--checkbox checkbox">
+                <ol class="list-inline row wordPage--container__rows"> 
+                  <li class="col-md-1 wordPage--container__title--1">car</li>
+                  <li class="col-md-1">en bil</li>
+                  <li class="col-md-1">bilen</li>
+                  <li class="col-md-1">bilar</li>
+                  <li class="col-md-1">bilarna</li>
+                  <li class="col-md-5">Jag köpte en ny bil i helgen. </li>
+                </ol>
+              </li>
+
+            </ol>
+          </pre>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Log In</title>
+  </head>
+  <body>
+    <div class="container">
+      <div>
+        <label>Username:</label>
+        <input type="text" id="username" name="username" /><span
+          id="username-message"
+        ></span>
+      </div>
+      <div>
+        <label>Password:</label>
+        <input type="password" id="password" name="password" />
+      </div>
+      <div>
+        <button id="login-btn">Log In</button>
+        <button id="register-btn">Register</button>
+        <button id="update-btn">Update User</button>
+        <button id="delete-btn">Delete User</button>
+      </div>
+      <div>Current user: <span id="current-user"></span></div>
+      <div>All users: <span id="all-users"></span></div>
+    </div>
+    <div id="notification"></div>
+    <script>
+      const loginBtn = document.getElementById("login-btn");
+      const registerBtn = document.getElementById("register-btn");
+      const updateBtn = document.getElementById("update-btn");
+      const deleteBtn = document.getElementById("delete-btn");
+      const notification = document.getElementById("notification");
+
+      function getBody() {
+        const username = document.getElementById("username").value;
+        const password = document.getElementById("password").value;
+        return { username, password };
+      }
+
+      //generic function to fetch data from the server
+      function fetchData(url, body) {
+        return fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json;charset=UTF-8",
+          },
+          body: JSON.stringify(body),
+        });
+      }
+
+      //fetch users data from the server
+      async function fetchUsers() {
+        const response = await fetch("http://localhost:8080/users");
+        const data = await response.json();
+        const allUsers = document.getElementById("all-users");
+        allUsers.innerText = data.users.map((user) => user).join(", ");
+
+        console.log(data);
+      }
+
+      fetchUsers();
+
+      //login button event listener
+      loginBtn.addEventListener("click", async () => {
+        const body = getBody();
+        const response = await fetchData("http://localhost:8080/login", body);
+        const data = await response.json();
+        const currentUser = document.getElementById("current-user");
+
+        if (response.ok) {
+          currentUser.innerText = data.username;
+          notification.innerText =
+            "Login successful! Redirecting to the website in 3 seconds...";
+          notification.style.display = "block";
+          setTimeout(() => {
+            window.location.href = "/website";
+          }, 3000);
+        } else {
+          currentUser.innerText = "";
+          notification.innerText = data.error;
+          notification.style.display = "block";
+        }
+      });
+
+      //register button event listener
+      registerBtn.addEventListener("click", async () => {
+        const body = getBody();
+        const usernameMessage = document.getElementById("username-message");
+
+        try {
+          const response = await fetchData(
+            "http://localhost:8080/register",
+            body
+          );
+
+          if (response.ok) {
+            const data = await response.json();
+            usernameMessage.innerText = data.message;
+          } else {
+            const errorData = await response.json();
+            usernameMessage.innerText = errorData.error;
+          }
+        } catch (error) {
+          console.error("Network or server error", error);
+        }
+      });
+    </script>
+  </body>
+</html>
