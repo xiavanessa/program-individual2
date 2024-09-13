@@ -26,9 +26,17 @@ document.addEventListener("DOMContentLoaded", () => {
     currentUser.innerText = "";
   }
 
+  //Display current user
+  function displayCurrentUser(data) {
+    currentUser.innerText = data.username || "";
+    currentUser.style.color = "white";
+    currentUser.style.fontStyle = "italic";
+  }
+
   // Display notification
-  function displayNotification(message, duration = 3000) {
+  function displayNotification(message, color = "green", duration = 3000) {
     notification.innerText = message;
+    notification.style.backgroundColor = color;
     notification.style.display = "block";
     setTimeout(() => {
       notification.style.display = "none";
@@ -60,7 +68,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return await response.json();
     } catch (error) {
       console.error("Fetch error:", error);
-      displayNotification("Network or server error. Please try again later.");
+      displayNotification(
+        "Network or server error. Please try again later.",
+        "red"
+      );
       throw error; // Rethrow to let the calling function handle it
     }
   }
@@ -70,6 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const data = await fetchData("/users", null, "GET");
       allUsers.innerText = data.users.join(", ");
+      allUsers.style.color = "white";
     } catch (error) {
       allUsers.innerText = "Error fetching users.";
     }
@@ -81,8 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const body = getBody();
       const data = await fetchData("/login", body);
-
-      currentUser.innerText = data.username || "";
+      displayCurrentUser(data);
       displayNotification(
         "Login successful! Redirecting to the website in 3 seconds..."
       );
@@ -90,7 +101,8 @@ document.addEventListener("DOMContentLoaded", () => {
     } catch (error) {
       clearCurrentUser();
       displayNotification(
-        "Login failed: " + (error.message || "Unknown error")
+        "Login failed: " + (error.message || "Unknown error"),
+        "red"
       );
     }
   });
@@ -107,7 +119,8 @@ document.addEventListener("DOMContentLoaded", () => {
       fetchUsers();
     } catch (error) {
       displayNotification(
-        "Registration failed: " + (error.message || "Unknown error")
+        "Registration failed: " + (error.message || "Unknown error"),
+        "red"
       );
     }
   });
@@ -118,7 +131,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const password = document.getElementById("password").value;
 
     if (!currentUsername || !password) {
-      displayNotification("Username and password are required.");
+      displayNotification("Username and password are required.", "red");
       return;
     }
 
@@ -126,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const newPassword = prompt("Enter new password:") || "";
 
     if (!newUsername && !newPassword) {
-      displayNotification("No new username or password entered.");
+      displayNotification("No new username or password entered.", "red");
       return;
     }
 
@@ -140,7 +153,8 @@ document.addEventListener("DOMContentLoaded", () => {
       fetchUsers();
     } catch (error) {
       displayNotification(
-        "Update failed: " + (error.message || "Unknown error")
+        "Update failed: " + (error.message || "Unknown error"),
+        "red"
       );
     }
   });
@@ -159,7 +173,8 @@ document.addEventListener("DOMContentLoaded", () => {
       fetchUsers();
     } catch (error) {
       displayNotification(
-        "Delete failed: " + (error.message || "Unknown error")
+        "Delete failed: " + (error.message || "Unknown error"),
+        "red"
       );
     }
   });

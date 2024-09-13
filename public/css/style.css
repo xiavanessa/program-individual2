@@ -370,6 +370,19 @@ body {
   z-index: 1000;
 }
 
+.index {
+  display: flex;
+  justify-content: center;
+  background-color: var(--color-primary);
+  margin-top: 10%;
+  color: var(--color-quaternary);
+}
+
+.index--btn-container {
+  margin-top: 8px;
+  margin-bottom: 15px;
+}
+
 /* screen size */
 @media (min-width: 768px) {
   .wordPage--container--right--list > li > .wordPage--container--checkbox {
