@@ -28,7 +28,7 @@ User.sync();
 app.use(express.json()); // 解析 JSON 数据
 app.use(express.urlencoded({ extended: true })); // 解析 URL 编码的数据
 
-// 用户注册路由
+// register 
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
 
@@ -48,6 +48,7 @@ app.post("/register", async (req, res) => {
     if (error.name === "SequelizeUniqueConstraintError") {
       res.status(409).json({ error: "Username already exists." });
     } else {
+      console.error(error);
       res.status(500).json({ error: "Error registering user." });
     }
   }
@@ -142,7 +143,6 @@ app.delete("/users/:username", async (req, res) => {
   }
 
   try {
-    // 使用 username 查找用户
     const user = await User.findOne({ where: { username } });
 
     // 如果用户存在，验证密码
@@ -168,17 +168,17 @@ app.get("/", function (req, res) {
 
 //处理/index 路由，确保发送正确的文件路径
 app.get("/index", function (req, res) {
-  res.sendFile(path.join(__dirname, "index.html")); // 如果 index.html 在项目根目录下
+  res.sendFile(path.join(__dirname, "index.html")); 
 });
 
 // 处理 /website 路由，确保发送正确的文件路径
 app.get("/website", function (req, res) {
-  res.sendFile(path.join(__dirname, "website.html")); // 如果 website.html 在项目根目录下
+  res.sendFile(path.join(__dirname, "website.html")); 
 });
 
 // 处理 /wordpage 路由，返回 wordPage.html 文件
 app.get("/wordpage", function (req, res) {
-  res.sendFile(path.join(__dirname, "wordPage.html")); // 确保文件在 public 文件夹中
+  res.sendFile(path.join(__dirname, "wordPage.html")); 
 });
 
 // 启动服务器并监听端口
