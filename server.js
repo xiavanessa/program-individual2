@@ -29,12 +29,6 @@ app.use(express.urlencoded({ extended: true }));
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ error: "Username and password are required." });
-  }
-
   try {
     // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -59,12 +53,6 @@ app.post("/register", async (req, res) => {
 // login user
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ error: "Username and password are required." });
-  }
 
   try {
     // search user
@@ -104,12 +92,6 @@ app.put("/users/:username", async (req, res) => {
   const { username } = req.params;
   const { password, newUsername, newPassword } = req.body;
 
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ error: "Username and password are required." });
-  }
-
   if (!newUsername && !newPassword) {
     return res
       .status(400)
@@ -135,12 +117,6 @@ app.put("/users/:username", async (req, res) => {
       }
       if (newPassword) {
         updates.push(`password = ?`);
-      }
-
-      if (updates.length === 0) {
-        return res
-          .status(400)
-          .json({ error: "At least one field is required to update." });
       }
 
       const updateQuery = `UPDATE Users SET ${updates.join(
@@ -175,12 +151,6 @@ app.put("/users/:username", async (req, res) => {
 app.delete("/users/:username", async (req, res) => {
   const { username } = req.params;
   const { password } = req.body;
-
-  if (!username || !password) {
-    return res
-      .status(400)
-      .json({ error: "Username and password are required." });
-  }
 
   try {
     const [users] = await sequelize.query(

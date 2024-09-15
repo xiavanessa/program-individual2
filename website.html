@@ -11,38 +11,275 @@
     <script src="/controller.js" defer></script>
   </head>
   <body>
-    <header class="header">
-      <nav class="nav">
-        <img src="/img/avatar.jpg" alt="avatar" class="nav__avatar" />
-        <!-- list-inline is from BootStrap -->
-        <ul class="nav__links list-inline nav-pills">
-          <li class="nav__link active"><a href="/website">Hem</a></li>
-          <li class="nav__link"><a href="/wordpage">Ordförråd</a></li>
-          <li class="nav__link"><a href="#">Grammatik</a></li>
-          <li class="nav__link"><a href="#">Läsning</a></li>
-          <li class="nav__link"><a href="#">Lyssning</a></li>
-          <li class="nav__link"><a href="/about.html">About</a></li>
-          <li class="nav__link"><a href="/contact.html">Contact</a></li>
-        </ul>
+    <header class="header ">
+      <nav class="navbar navbar-default web-nav" role="navigation">
+        <div class="container-fluid">
+          <ul class="nav__links nav navbar-nav">
+            <li>
+              <img
+                src="/img/avatar.jpg"
+                alt="avatar"
+                class="nav__avatar"
+              />
+            </li>
+            <li class="active">
+              <a href="/website">Hem</a>
+            </li>
+            <li >
+              <a class="dropdown-toggle" data-toggle="dropdown"
+                >Ordförråd <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="/wordPage">Nouns (Substantiv)</a></li>
+                <li><a href="#">Verbs (Verb)</a></li>
+                <li><a href="#">Jasper Report</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Adjectives (Adjektiv)</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Pronouns (Pronomen)</a></li>
+                <li><a href="#">Adverbs (Adverb)</a></li>
+                <li><a href="#">Prepositions (Prepositioner)</a></li>
+                <li>
+                  <a href="#"
+                    >Numbers (Nummer) & Week (Vecka) & Month (Månad)</a
+                  >
+                </li>
+                <li><a href="#">Common Phrases (Vanliga Fraser)</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Grammatik</a></li>
+            <li><a href="#">Läsning</a></li>
+            <li><a href="#">Lyssning</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
       </nav>
 
-      <div class="header__title">
-        <h1 class="header__title__text">
-          Ta dig i kragen för <br />helvete Vanessa!
-        </h1>
-        <img
-          src="/img/home_header.jpg"
-          alt="home header"
-          class="header__title__img"
-        />
+      <div class="header__title container">
+        <div class="row">
+          <!-- 文字部分 -->
+          <div class="col-md-8 col-sm-6 col-xs-12">
+            <h1 class="header__title__text">
+              Ta dig i kragen för <br />helvete Vanessa!
+            </h1>
+          </div>
+    
+          <!-- 图片部分 -->
+          <div class="col-md-4 col-sm-6 col-xs-12">
+            <img
+              src="/img/home_header.jpg"
+              alt="home header"
+              class="header__title__img img-responsive"
+            />
+          </div>
+        </div>
       </div>
     </header>
+
     <main>
       <section id="section--1" class="panel">
-        <h2 class="section--1__heading">Dagens Ord</h2>
-        <div class="row">
+        <div class="container">
+          <h2 class="section--1__heading"><b>Dagens Ord</b></h2>
+          <div class="row section--1__content">
 
-          <div class="col-1-of-4 feature-box">
+            <div class="col-1-of-6  col-md-4 col-sm-6 col-xs-12">
+              <div class="thumbnail feature-box">
+                <div class="feature-box__section--1">
+                  <h3><b>bryta</b></h3>
+                  <p>bryter bröt brutit</p>
+                </div>
+
+                <div class="feature-box__section--2">
+                  <p><b>ORDKLASS: </b> verb</p>
+                </div>
+
+                <div class="feature-box__section--3">
+                  <div class="feature-box__section--3__example">
+                    <b>1.&nbsp;</b>
+                    <p>
+                      Jag måste <b>bryta</b> vanan att dricka kaffe sent på
+                      kvällen.
+                    </p>
+                  </div>
+                  <p class="feature-box__section--3__translation">
+                    I need to break the habit of drinking coffee late at night.
+                  </p>
+
+                  <div class="feature-box__section--3__example">
+                    <b>2.&nbsp;</b>
+                    <p>Han <b>bröt</b> benet när han föll från cykeln.</p>
+                  </div>
+                  <p class="feature-box__section--3__translation">
+                    He broke his leg when he fell off the bike.
+                  </p>
+                  <div class="text-center"> 
+                    <button class="btn ">
+                     <span class="glyphicon glyphicon-search"></span> Läs mer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-2-of-6  col-md-4 col-sm-6 col-xs-12">
+              <div class="thumbnail feature-box">
+                <div class="feature-box__section--1">
+                  <h3><b>bryta</b></h3>
+                  <p>bryter bröt brutit</p>
+                </div>
+
+                <div class="feature-box__section--2">
+                  <p><b>ORDKLASS: </b> verb</p>
+                </div>
+
+                <div class="feature-box__section--3">
+                  <div class="feature-box__section--3__example">
+                    <b>1.&nbsp;</b>
+                    <p>
+                      Jag måste <b>bryta</b> vanan att dricka kaffe sent på
+                      kvällen.
+                    </p>
+                  </div>
+                  <p class="feature-box__section--3__translation">
+                    I need to break the habit of drinking coffee late at night.
+                  </p>
+
+                  <div class="feature-box__section--3__example">
+                    <b>2.&nbsp;</b>
+                    <p>Han <b>bröt</b> benet när han föll från cykeln.</p>
+                  </div>
+                  <p class="feature-box__section--3__translation">
+                    He broke his leg when he fell off the bike.
+                  </p>
+                  <div class="text-center"> 
+                    <button class="btn ">
+                     <span class="glyphicon glyphicon-search"></span> Läs mer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-3-of-6  col-md-4 col-sm-6 col-xs-12">
+              <div class="thumbnail feature-box">
+                <div class="feature-box__section--1">
+                  <h3><b>bryta</b></h3>
+                  <p>bryter bröt brutit</p>
+                </div>
+
+                <div class="feature-box__section--2">
+                  <p><b>ORDKLASS: </b> verb</p>
+                </div>
+
+                <div class="feature-box__section--3">
+                  <div class="feature-box__section--3__example">
+                    <b>1.&nbsp;</b>
+                    <p>
+                      Jag måste <b>bryta</b> vanan att dricka kaffe sent på
+                      kvällen.
+                    </p>
+                  </div>
+                  <p class="feature-box__section--3__translation">
+                    I need to break the habit of drinking coffee late at night.
+                  </p>
+
+                  <div class="feature-box__section--3__example">
+                    <b>2.&nbsp;</b>
+                    <p>Han <b>bröt</b> benet när han föll från cykeln.</p>
+                  </div>
+                  <p class="feature-box__section--3__translation">
+                    He broke his leg when he fell off the bike.
+                  </p>
+                  <div class="text-center"> 
+                    <button class="btn ">
+                     <span class="glyphicon glyphicon-search"></span> Läs mer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-4-of-6  col-md-4 col-sm-6 col-xs-12">
+              <div class="thumbnail feature-box">
+                <div class="feature-box__section--1">
+                  <h3><b>bryta</b></h3>
+                  <p>bryter bröt brutit</p>
+                </div>
+
+                <div class="feature-box__section--2">
+                  <p><b>ORDKLASS: </b> verb</p>
+                </div>
+
+                <div class="feature-box__section--3">
+                  <div class="feature-box__section--3__example">
+                    <b>1.&nbsp;</b>
+                    <p>
+                      Jag måste <b>bryta</b> vanan att dricka kaffe sent på
+                      kvällen.
+                    </p>
+                  </div>
+                  <p class="feature-box__section--3__translation">
+                    I need to break the habit of drinking coffee late at night.
+                  </p>
+
+                  <div class="feature-box__section--3__example">
+                    <b>2.&nbsp;</b>
+                    <p>Han <b>bröt</b> benet när han föll från cykeln.</p>
+                  </div>
+                  <p class="feature-box__section--3__translation">
+                    He broke his leg when he fell off the bike.
+                  </p>
+                  <div class="text-center"> 
+                    <button class="btn ">
+                     <span class="glyphicon glyphicon-search"></span> Läs mer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-5-of-6  col-md-4 col-sm-6 col-xs-12">
+            <div class="thumbnail feature-box">
+              <div class="feature-box__section--1">
+                <h3><b>bryta</b></h3>
+                <p>bryter bröt brutit</p>
+              </div>
+
+              <div class="feature-box__section--2">
+                <p><b>ORDKLASS: </b> verb</p>
+              </div>
+
+              <div class="feature-box__section--3">
+                <div class="feature-box__section--3__example">
+                  <b>1.&nbsp;</b>
+                  <p>
+                    Jag måste <b>bryta</b> vanan att dricka kaffe sent på
+                    kvällen.
+                  </p>
+                </div>
+                <p class="feature-box__section--3__translation">
+                  I need to break the habit of drinking coffee late at night.
+                </p>
+
+                <div class="feature-box__section--3__example">
+                  <b>2.&nbsp;</b>
+                  <p>Han <b>bröt</b> benet när han föll från cykeln.</p>
+                </div>
+                <p class="feature-box__section--3__translation">
+                  He broke his leg when he fell off the bike.
+                </p>
+                <div class="text-center"> 
+                  <button class="btn ">
+                   <span class="glyphicon glyphicon-search"></span> Läs mer
+                  </button>
+                </div>
+              </div>
+            </div>
+            </div> 
+
+            <div class="col-6-of-6  col-md-4 col-sm-6 col-xs-12">
+          <div class="thumbnail feature-box">
             <div class="feature-box__section--1">
               <h3><b>bryta</b></h3>
               <p>bryter bröt brutit</p>
@@ -53,66 +290,93 @@
             </div>
 
             <div class="feature-box__section--3">
+              <div class="feature-box__section--3__example">
+                <b>1.&nbsp;</b>
+                <p>
+                  Jag måste <b>bryta</b> vanan att dricka kaffe sent på
+                  kvällen.
+                </p>
+              </div>
+              <p class="feature-box__section--3__translation">
+                I need to break the habit of drinking coffee late at night.
+              </p>
 
               <div class="feature-box__section--3__example">
-                <b>1.&nbsp;</b> 
-                <p> Jag måste <b>bryta</b>  vanan att dricka kaffe sent på kvällen.</p>
-              </div>  
-              <p class="feature-box__section--3__translation">I need to break the habit of drinking coffee late at night.</p>
-
-              <div class="feature-box__section--3__example">
-                <b>2.&nbsp;</b> 
-                <p> Han <b>bröt</b> benet när han föll från cykeln.</p>
-              </div>  
-              <p class="feature-box__section--3__translation">He broke his leg when he fell off the bike.</p>
+                <b>2.&nbsp;</b>
+                <p>Han <b>bröt</b> benet när han föll från cykeln.</p>
+              </div>
+              <p class="feature-box__section--3__translation">
+                He broke his leg when he fell off the bike.
+              </p>
+              <div class="text-center"> 
+                <button class="btn ">
+                 <span class="glyphicon glyphicon-search"></span> Läs mer
+                </button>
+              </div>
             </div>
           </div>
-
-        <div class="col-2-of-4 feature-box"></div>
-        <div class="col-3-of-4 feature-box"></div>
-        <div class="col-4-of-4 feature-box"></div>
-          </div>
-        </div>
-      </section>
- 
-      <section id="section--2" >
-        <div class="slider container">
-          <div class="slide">
-            <div class="slide__testimonial">
-              <blockquote class="slide__text"> Hårt arbete lönar sig alltid.</blockquote> 
-              <address class="slide__author">
-                <p class="slide__author__1__name">Emil Kronholm</p>
-                <img src="/img/emil.png" alt="slide 1 author" class="slide__author__img1" /> 
-              </address>
             </div>
-          </div>
-          
-          <div class="slide">
-            <div class="slide__testimonial">
-              <blockquote class="slide__text">2Hårt arbete lönar sig alltid.</blockquote> 
-              <address class="slide__author">
-                <p class="slide__author__1__name">2Emil Kronholm</p>
-                <img src="/img/emil.png" alt="slide 1 author" class="slide__author__img1" /> 
-              </address>
-            </div>
-          </div>
-
-          <div class="slide">
-            <div class="slide__testimonial">
-              <blockquote class="slide__text"> 3 Hårt arbete lönar sig alltid.</blockquote> 
-              <address class="slide__author">
-                <p class="slide__author__1__name">Emil Kronholm 3</p>
-                <img src="/img/emil.png" alt="slide 1 author" class="slide__author__img1" /> 
-              </address>
-            </div>
-          </div>
-
-            <button class="slider__btn slider__btn--left">&lt;</button>
-            <button class="slider__btn slider__btn--right">&gt;</button>
-            <div class="dots"></div>
         </div>
       </section>
 
+      <section id="section--2">
+        <div class="slider">
+
+
+          <div class="slide container">
+            <div class="slide__testimonial">
+              <address class="slide__author">
+                <img
+                  src="/img/emil.png"
+                  alt="slide 1 author"
+                  class="slide__author__img1"
+                />
+                <p class="slide__author__name">Emil Kronholm</p>
+              </address>
+              <blockquote class="slide__text">
+                Hårt arbete lönar sig alltid.
+              </blockquote>
+            </div>
+          </div>
+
+
+          <div class="slide container">
+            <div class="slide__testimonial">
+              <address class="slide__author">
+                <img
+                  src="./img/emil.png"
+                  alt="slide 1 author"
+                  class="slide__author__img1"
+                />
+                <p class="slide__author__name">Emil Kronholm 3</p>
+              </address>
+              <blockquote class="slide__text">
+                2 Hårt arbete lönar sig alltid.
+              </blockquote>
+            </div>
+          </div>
+
+          <div class="slide container">
+            <div class="slide__testimonial">
+              <address class="slide__author">
+                <img
+                  src="./img/emil.png"
+                  alt="slide 1 author"
+                  class="slide__author__img1"
+                />
+                <p class="slide__author__name">Emil Kronholm 3</p>
+              </address>
+              <blockquote class="slide__text">
+                3 Hårt arbete lönar sig alltid.
+              </blockquote>
+            </div>
+          </div>
+
+          <button class="slider__btn slider__btn--left 	glyphicon glyphicon-chevron-left"></button>
+          <button class="slider__btn slider__btn--right glyphicon glyphicon-chevron-right"></button>
+          <div class="dots"></div>
+        </div>
+      </section>
     </main>
   </body>
 </html>

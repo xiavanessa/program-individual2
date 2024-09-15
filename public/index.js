@@ -7,12 +7,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const notification = document.getElementById("notification");
   const allUsers = document.getElementById("all-users");
   const currentUser = document.getElementById("current-user");
+  const colorTertiary = getComputedStyle(
+    document.documentElement
+  ).getPropertyValue("--color-tertiary");
 
   // Utility Functions
   function getBody() {
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
     return { username, password };
+  }
+
+  //check if username and password are entered
+  function checkIfUsernameAndPasswordAreEntered() {
+    const { username, password } = getBody();
+    if (!username || !password) {
+      displayNotification("Username and password are required.", "red");
+      return false;
+    }
+    return true;
   }
 
   // Clear input fields
@@ -29,8 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //Display current user
   function displayCurrentUser(data) {
     currentUser.innerText = data.username || "";
-    currentUser.style.color = "white";
-    currentUser.style.fontStyle = "italic";
+    currentUser.style.color = colorTertiary;
   }
 
   // Display notification
@@ -80,8 +92,8 @@ document.addEventListener("DOMContentLoaded", () => {
   async function fetchUsers() {
     try {
       const data = await fetchData("/users", null, "GET");
-      allUsers.innerText = data.users.join(", ");
-      allUsers.style.color = "white";
+      allUsers.innerHTML = data.users.join(", ");
+      allUsers.style.color = colorTertiary;
     } catch (error) {
       allUsers.innerText = "Error fetching users.";
     }
@@ -90,6 +102,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Event Listeners
   // Log in user
   loginBtn.addEventListener("click", async () => {
+    if (!checkIfUsernameAndPasswordAreEntered()) return;
+
     try {
       const body = getBody();
       const data = await fetchData("/login", body);
@@ -109,6 +123,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Register new user
   registerBtn.addEventListener("click", async () => {
+    if (!checkIfUsernameAndPasswordAreEntered()) return;
+
     try {
       const body = getBody();
       const data = await fetchData("/register", body);
@@ -127,13 +143,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Update user
   updateBtn.addEventListener("click", async () => {
+    if (!checkIfUsernameAndPasswordAreEntered()) return;
     const currentUsername = document.getElementById("username").value;
     const password = document.getElementById("password").value;
-
-    if (!currentUsername || !password) {
-      displayNotification("Username and password are required.", "red");
-      return;
-    }
 
     const newUsername = prompt("Enter new username:") || "";
     const newPassword = prompt("Enter new password:") || "";
@@ -161,6 +173,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Delete user
   deleteBtn.addEventListener("click", async () => {
+    if (!checkIfUsernameAndPasswordAreEntered()) return;
+
     const currentUsername = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 

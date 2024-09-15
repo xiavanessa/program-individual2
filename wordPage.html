@@ -13,55 +13,62 @@
 
   <body class="wordPage--body">
     <!--nav-->
-    <nav class="nav">
-      <img src="/img/avatar.jpg" alt="avatar" class="nav__avatar" />
-      <!-- list-inline is from BootStrap -->
-      <ul class="nav__links list-inline nav-pills">
-        <li class="nav__link"><a href="/website">Hem</a></li>
-        <li class="nav__link active"><a href="/wordpage">Ordförråd</a></li>
-        <li class="nav__link"><a href="#">Grammatik</a></li>
-        <li class="nav__link"><a href="#">Läsning</a></li>
-        <li class="nav__link"><a href="#">Lyssning</a></li>
-        <li class="nav__link"><a href="/about.html">About</a></li>
-        <li class="nav__link"><a href="/contact.html">Contact</a></li>
-      </ul>
-    </nav>
-
-    <div class="container wordPage--container">
-      <div class="row wordPage--container__row">
-        <!--voc classification-->
-        <div class="col-md-2 wordPage--left">
-          <h4 class="active">Nouns (Substantiv)</h4>
-          <h4>Verbs (Verb)</h4>
-          <h4>Adjectives (Adjektiv)</h4>
-          <h4>Pronouns (Pronomen)</h4>
-          <h4>Adverbs (Adverb)</h4>
-          <h4>Prepositions (Prepositioner)</h4>
-          <h4>Numbers (Nummer) & Week (Vecka) & Month (Månad)</h4>
-          <h4>Common Phrases (Vanliga Fraser)</h4>
-          <h4>Example Sentences</h4>
+    <header class="header">
+      <nav class="navbar navbar-default web-nav" role="navigation">
+        <div class="container-fluid">
+          <ul class="nav__links nav navbar-nav">
+            <li>
+              <img
+                src="/img/avatar.jpg"
+                alt="avatar"
+                class="nav__avatar"
+              />
+            </li>
+            <li class="active">
+              <a href="/website">Hem</a>
+            </li>
+            <li >
+              <a class="dropdown-toggle" data-toggle="dropdown"
+                >Ordförråd <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="/wordPage">Nouns (Substantiv)</a></li>
+                <li><a href="#">Verbs (Verb)</a></li>
+                <li><a href="#">Jasper Report</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Adjectives (Adjektiv)</a></li>
+                <li class="divider"></li>
+                <li><a href="#">Pronouns (Pronomen)</a></li>
+                <li><a href="#">Adverbs (Adverb)</a></li>
+                <li><a href="#">Prepositions (Prepositioner)</a></li>
+                <li>
+                  <a href="#"
+                    >Numbers (Nummer) & Week (Vecka) & Month (Månad)</a
+                  >
+                </li>
+                <li><a href="#">Common Phrases (Vanliga Fraser)</a></li>
+              </ul>
+            </li>
+            <li><a href="#">Grammatik</a></li>
+            <li><a href="#">Läsning</a></li>
+            <li><a href="#">Lyssning</a></li>
+            <li><a href="#">About</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
         </div>
+      </nav>
+    </header>
+
+    <div class=" wordPage--container">
         <!--voc forms-->
-        <div class="col-md-10 wordPage--container--right">
+        <div class="container wordPage--container--right">
           <div class="row wordPage--container__rows">
-            <div class="col-md-1 wordPage--container--right--title">
-              Engelska
-            </div>
-            <div class="col-md-1 wordPage--container--right--title">
-              Indefinite Singular
-            </div>
-            <div class="col-md-1 wordPage--container--right--title">
-              Definite Singular
-            </div>
-            <div class="col-md-1 wordPage--container--right--title">
-              Indefinite Plural
-            </div>
-            <div class="col-md-1 wordPage--container--right--title">
-              Definite Plural
-            </div>
-            <div class="col-md-5 wordPage--container--right--title">
-              Example
-            </div>
+            <div class="col-md-1 wordPage--container__title--1">Engelska</div>
+            <div class="col-md-2">Indefinite Singular</div>
+            <div class="col-md-2">Definite Singular</div>
+            <div class="col-md-2">Indefinite Plural</div>
+            <div class="col-md-2">Definite Plural</div>
+            <div class="col-md-3">Example</div>
           </div>
 
           <!-- Button trigger modal -->
@@ -80,11 +87,17 @@
             tabindex="-1"
             role="dialog"
             aria-labelledby="myModalLabel"
+            aria-hidden="true"
           >
             <div class="modal-dialog">
               <div class="modal-content">
                 <div class="modal-header">
-                  <button type="button" class="close" data-dismiss="modal">
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-hidden="true"
+                  >
                     &times;
                   </button>
                   <h4 class="modal-title" id="myModalLabel">Add word</h4>
@@ -178,12 +191,19 @@
                   >
                     close
                   </button>
-                  <button type="button" class="btn btn-primary" id="add">
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    data-dismiss="modal"
+                    id="add"
+                  >
                     ADD
                   </button>
                 </div>
               </div>
+              <!-- /.modal-content -->
             </div>
+            <!-- /.modal -->
           </div>
 
           <!--vocabulary-->
@@ -327,5 +347,6 @@
         </div>
       </div>
     </div>
+    
   </body>
 </html>
