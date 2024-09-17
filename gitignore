@@ -1,4 +1,5 @@
 node_modules
 bootstrap
 package-lock.json
+.sqlite3
 

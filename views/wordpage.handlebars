@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -24,8 +23,8 @@
               <a href="/website">Hem</a>
             </li>
             <li class="active">
-              <a class="dropdown-toggle" data-toggle="dropdown"
-                >Ordförråd <b class="caret"></b>
+              <a class="dropdown-toggle" data-toggle="dropdown">Ordförråd
+                <b class="caret"></b>
               </a>
               <ul class="dropdown-menu">
                 <li class="active">
@@ -40,9 +39,7 @@
                 <li><a href="#">Adverbs (Adverb)</a></li>
                 <li><a href="#">Prepositions (Prepositioner)</a></li>
                 <li>
-                  <a href="#"
-                    >Numbers (Nummer) & Week (Vecka) & Month (Månad)</a
-                  >
+                  <a href="#">Numbers (Nummer) & Week (Vecka) & Month (Månad)</a>
                 </li>
                 <li><a href="#">Common Phrases (Vanliga Fraser)</a></li>
               </ul>
@@ -92,7 +89,7 @@
           </div>
 
           <div class="modal-body">
-            <form class="form-horizontal" role="form">
+            <form class="form-horizontal" id="addWordForm" role="form">
               <div class="form-group">
                 <label for="engelska" class="col-md-2">Engelska</label>
                 <div class="col-md-9">
@@ -103,9 +100,8 @@
 
             <form class="form-horizontal" role="form">
               <div class="form-group">
-                <label for="indefinite--singular" class="col-md-2"
-                  >Indefinite Singular</label
-                >
+                <label for="indefinite--singular" class="col-md-2">Indefinite
+                  Singular</label>
                 <div class="col-md-9">
                   <input
                     type="text"
@@ -118,9 +114,8 @@
 
             <form class="form-horizontal" role="form">
               <div class="form-group">
-                <label for="definite--singular" class="col-md-2"
-                  >Definite Singular</label
-                >
+                <label for="definite--singular" class="col-md-2">Definite
+                  Singular</label>
                 <div class="col-md-9">
                   <input
                     type="text"
@@ -133,9 +128,8 @@
 
             <form class="form-horizontal" role="form">
               <div class="form-group">
-                <label for="indefinite--plural" class="col-md-2"
-                  >Indefinite Plural</label
-                >
+                <label for="indefinite--plural" class="col-md-2">Indefinite
+                  Plural</label>
                 <div class="col-md-9">
                   <input
                     type="text"
@@ -148,9 +142,7 @@
 
             <form class="form-horizontal" role="form">
               <div class="form-group">
-                <label for="definite--plural" class="col-md-2"
-                  >Definite Plural</label
-                >
+                <label for="definite--plural" class="col-md-2">Definite Plural</label>
                 <div class="col-md-9">
                   <input
                     type="text"
@@ -179,7 +171,7 @@
               type="button"
               class="btn btn-primary"
               data-dismiss="modal"
-              id="add"
+              id="addWordButton"
             >
               ADD
             </button>
@@ -213,7 +205,6 @@
 
       <!-- table nouns -->
       <table class="table table-hover table-responsive wordPage--nouns--table">
-        <!--table head-->
         <thead>
           <tr>
             <th>Engelska</th>
@@ -222,27 +213,30 @@
             <th>Indefinite Plural</th>
             <th>Definite Plural</th>
             <th>Example</th>
+            <th>Actions</th>
           </tr>
         </thead>
-
         <tbody>
-          <!-- 使用从数据库中获取的单词信息动态填充 -->
-          <tr>
-            <td>car</td>
-            <td>en bil</td>
-            <td>bilen</td>
-            <td>bilar</td>
-            <td>bilarna</td>
-            <td>Jag köpte en ny bil i helgen.</td>
-          </tr>
-          <tr>
-            <td>car</td>
-            <td>en bil</td>
-            <td>bilen</td>
-            <td>bilar</td>
-            <td>bilarna</td>
-            <td>Jag köpte en ny bil i helgen.</td>
-          </tr>
+          {{#each words}}
+            <!-- 循环渲染每一行的单词 -->
+            <tr>
+              <td>{{this.english}}</td>
+              <td>{{this.indefiniteSingular}}</td>
+              <td>{{this.definiteSingular}}</td>
+              <td>{{this.indefinitePlural}}</td>
+              <td>{{this.definitePlural}}</td>
+              <td>{{this.example}}</td>
+              <td>
+                {{#if this.is_custom}}
+                  <!-- 只为手动添加的单词显示删除按钮 -->
+                  <button
+                    class="btn btn-danger btn-sm delete-word"
+                    data-id="{{this.id}}"
+                  >Delete</button>
+                {{/if}}
+              </td>
+            </tr>
+          {{/each}}
         </tbody>
       </table>
     </div>

@@ -229,9 +229,22 @@ body {
 }
 
 /*wordPage*/
-
+/* nouns classification */
 .wordPage--body {
   background-color: var(--color-primary);
+}
+
+.wordPage--nouns--add {
+  margin-top: 20px;
+  margin-right: 15px;
+}
+
+.wordPage--nouns {
+  color: var(--color-quaternary);
+}
+
+.wordPage--nouns--searchbar {
+  margin: 25px 0;
 }
 
 .wordPage--container {
@@ -241,82 +254,8 @@ body {
   padding: 0px;
 }
 
-.wordPage--left {
-  background-color: var(--color-primary);
-  margin-left: 0;
-  height: 100%;
-  height: 87vh;
-}
-
-/* nouns classification */
-.wordPage--container--right > :first-child {
-  padding: 20px;
-  color: var(--color-quaternary);
-}
-
-.wordPage--container__rows {
-  width: 100%;
-  color: var(--color-quaternary);
-  font-weight: 600;
-  line-height: normal;
-  font-size: 1.6rem;
-}
-
-.wordPage--container--right {
-  background-color: var(--color-quinary);
-  position: relative;
-  padding: 0;
-}
-
-.wordPage--btn--add {
-  position: absolute;
-  right: 25px;
-  top: 5px;
-}
-
-.wordPage--left h4 {
-  margin: 30px 5px;
-  font-weight: 400;
-  color: white;
-  font-size: medium;
-}
-
-.wordPage--scroll--container {
-  max-width: 95%;
-  max-height: 75vh;
-  background-color: var(--color-quinary);
-  padding: 0;
-  margin: 0;
-  border: none;
-}
-
-.wordPage--container--right--list {
-  padding-left: 30px;
-  counter-reset: item; /* 初始化计数器 */
-  margin-bottom: 0;
-}
-
-/* .wordPage--container--right--list 的direct child element */
-.wordPage--container--right--list > li {
-  display: flex;
-  align-items: flex-start;
-  position: relative; /* 为伪元素定位做准备 */
-  height: 0px;
-}
-
-/* show number by using pseudo-element */
-.wordPage--container--right--list > li::before {
-  content: counter(item) ". ";
-  counter-increment: item;
-  position: absolute;
-  left: 0%;
-  top: 0;
-  color: var(--color-secondary);
-  font-weight: 600;
-}
-
-.wordPage--container--right--list > li > .wordPage--container--checkbox {
-  position: absolute;
+.wordPage--nouns--table {
+  font-size: 1rem;
 }
 
 /* index.html */
@@ -357,6 +296,10 @@ body {
 
   .slider__btn {
     font-size: 5rem;
+  }
+
+  .wordPage--nouns--table {
+    font-size: 1.6rem;
   }
 }
 

@@ -87,67 +87,100 @@ slider();
 
 //wordpage
 //modal
-async function fetchData(url, body) {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json; charset=utf-8",
-      },
-      body: JSON.stringify(body),
-    });
-
-    // Parse the JSON response
-    const data = await response.json();
-
-    // Log success and return data
-    console.log("Success:", data);
-    return data;
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
-
-// retrieve values from modal input fields
-function getBody() {
-  return {
-    engelska: $("#engelska").val().trim(),
-    indefiniteSingular: $("#indefinite--singular").val().trim(),
-    definiteSingular: $("#definite--singular").val().trim(),
-    indefinitePlural: $("#indefinite--plural").val().trim(),
-    definitePlural: $("#definite--plural").val().trim(),
-    example: $("#example").val().trim(),
-  };
-}
-
-// Function to validate if any fields are empty
-function areFieldsEmpty(body) {
-  return Object.values(body).some((value) => !value);
-}
-
-// Get modal values
 $(function () {
-  $("#myModal").on("click", "#add", async function () {
-    console.log("add button clicked");
-    const body = getBody();
+  $("#myModal").on("click", "#addWordButton", async function () {
+    const body = {
+      english: $("#engelska").val(),
+      indefiniteSingular: $("#indefinite--singular").val(),
+      definiteSingular: $("#definite--singular").val(),
+      indefinitePlural: $("#indefinite--plural").val(),
+      definitePlural: $("#definite--plural").val(),
+      example: $("#example").val(),
+      isCustom: 1,
+    };
 
-    if (areFieldsEmpty(body)) {
+    // Ensure no empty fields
+    if (Object.values(body).some((value) => value === "")) {
       alert("Please fill in all fields before submitting.");
-    } else {
-      console.log(body);
-      //send the data to server
-      await fetchData("http://localhost:8080/add-word", body);
+      return;
+    }
 
-      // Hide the modal
-      $("#myModal").modal("hide");
+    try {
+      const response = await fetch("/add-word", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
 
-      // Reset the input fields
-      $("#engelska").val("");
-      $("#indefinite--singular").val("");
-      $("#definite--singular").val("");
-      $("#indefinite--plural").val("");
-      $("#definite--plural").val("");
-      $("#example").val("");
+      const result = await response.json();
+
+      if (response.ok) {
+        // Word added successfully, append the new word to the table
+        alert("Word added successfully!");
+
+        // 添加新的行到表格，并设置正确的 data-id
+        const newRow = `
+          <tr>
+            <td>${body.english}</td>
+            <td>${body.indefiniteSingular}</td>
+            <td>${body.definiteSingular}</td>
+            <td>${body.indefinitePlural}</td>
+            <td>${body.definitePlural}</td>
+            <td>${body.example}</td>
+            <td>
+              <button
+                class="btn btn-danger btn-sm delete-word"
+                data-id="${result.id}"
+              >Delete</button>
+            </td>
+          </tr>
+        `;
+        // 将新行插入到表格的主体
+        $("table tbody").append(newRow);
+
+        // 清空输入框
+        $(
+          "#engelska, #indefinite--singular, #definite--singular, #indefinite--plural, #definite--plural, #example"
+        ).val("");
+      } else {
+        console.error(result.error);
+        alert("Failed to add word: " + result.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error adding word");
+    }
+  });
+});
+
+$(function () {
+  // 点击删除按钮，发送删除请求
+  $("table").on("click", ".delete-word", async function () {
+    const wordId = $(this).data("id");
+    console.log("delete button clicked", wordId);
+
+    const confirmed = confirm("Are you sure you want to delete this word?");
+    if (!confirmed) return;
+
+    try {
+      const response = await fetch(`/delete-word/${wordId}`, {
+        method: "DELETE",
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        // 删除成功，移除该行
+        alert("Word deleted successfully!");
+        $(this).closest("tr").remove();
+      } else {
+        alert("Failed to delete word: " + result.error);
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting word");
     }
   });
 });
