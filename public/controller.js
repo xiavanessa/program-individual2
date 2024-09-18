@@ -1,4 +1,30 @@
 "strict mode";
+//navbar
+const navLogout = () => {
+  const logoutBtn = document.querySelector("#logoutButton");
+  logoutBtn.addEventListener("click", async function () {
+    try {
+      const response = await fetch("/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        // Logout was successful, redirect to the home or login page
+        window.location.href = "/index"; // or wherever you want to redirect after logout
+      } else {
+        alert("Logout failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+      alert("Error during logout. Please try again.");
+    }
+  });
+};
+navLogout();
+
 //slider
 const slider = function () {
   const slides = document.querySelectorAll(".slide");
@@ -82,7 +108,6 @@ const slider = function () {
     }
   });
 };
-
 slider();
 
 //wordpage
@@ -172,7 +197,6 @@ $(function () {
       const result = await response.json();
 
       if (response.ok) {
-        // 删除成功，移除该行
         alert("Word deleted successfully!");
         $(this).closest("tr").remove();
       } else {

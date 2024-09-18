@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const registerBtn = document.getElementById("register-btn");
   const updateBtn = document.getElementById("update-btn");
   const deleteBtn = document.getElementById("delete-btn");
+  const logoutBtn = document.getElementById("logout-btn");
   const notification = document.getElementById("notification");
   const allUsers = document.getElementById("all-users");
   const currentUser = document.getElementById("current-user");
@@ -195,4 +196,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initial fetch
   fetchUsers();
+
+  logoutBtn.addEventListener("click", async function () {
+    try {
+      const response = await fetch("/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.ok) {
+        // Logout was successful, redirect to the home or login page
+        window.location.href = "/contact"; // or wherever you want to redirect after logout
+      } else {
+        alert("Logout failed. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error during logout:", error);
+      alert("Error during logout. Please try again.");
+    }
+  });
 });

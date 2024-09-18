@@ -53,6 +53,10 @@ body {
   padding: 4px 6px;
 }
 
+#logoutButton {
+  padding: 15px 10px;
+}
+
 /* header */
 .header {
   background-color: var(--color-primary);
@@ -324,6 +328,12 @@ body {
 
   .slide__author__name {
     font-size: 2rem;
+  }
+}
+
+@media (min-width: 992px) {
+  .navbar-nav > li {
+    float: left;
   }
 }
 

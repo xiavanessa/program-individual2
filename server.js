@@ -4,6 +4,7 @@ const path = require("path");
 const { Sequelize, DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
 const sqlite3 = require("sqlite3").verbose();
+const session = require("express-session");
 
 const app = express();
 const port = 8080;
@@ -19,6 +20,16 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, "public")));
+
+// Set up session middleware
+app.use(
+  session({
+    secret: "yourSecretKey", // You should replace this with an environment variable in production
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false }, // Set secure to true if you are using HTTPS
+  })
+);
 
 //db
 const db = new sqlite3.Database("vocabulary.sqlite3.db", (err) => {
@@ -161,6 +172,8 @@ app.post("/login", async (req, res) => {
 
     // verify password
     if (user && (await bcrypt.compare(password, user.password))) {
+      // Store user information in session
+      req.session.user = { username: user.username };
       res.json({ message: "Login successful.", username: user.username });
     } else {
       res.status(401).json({ error: "Invalid username or password." });
@@ -169,6 +182,33 @@ app.post("/login", async (req, res) => {
     console.error(error);
     res.status(500).json({ error: "Error logging in." });
   }
+});
+
+// Middleware to protect routes
+const ensureAuthenticated = (req, res, next) => {
+  if (req.session.user) {
+    return next();
+  } else {
+    res.status(401).json({ error: "Unauthorized. Please log in." });
+  }
+};
+
+// Protected route
+app.get("/protected-route", ensureAuthenticated, (req, res) => {
+  res.json({
+    message: "You have accessed a protected route",
+    user: req.session.user,
+  });
+});
+
+// Logout route
+app.post("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      return res.status(500).json({ error: "Logout failed." });
+    }
+    res.json({ message: "Logout successful." });
+  });
 });
 
 // retrieve all users
