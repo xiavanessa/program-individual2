@@ -1,7 +1,6 @@
 const express = require("express");
 const { engine } = require("express-handlebars");
 const path = require("path");
-const { Sequelize, DataTypes } = require("sequelize");
 const bcrypt = require("bcrypt");
 const sqlite3 = require("sqlite3").verbose();
 const session = require("express-session");
@@ -119,69 +118,72 @@ app.delete("/delete-word/:id", (req, res) => {
 
 //user management system
 // Create SQLite database
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: "./database2.sqlite",
+const userDb = new sqlite3.Database("users.sqlite3.db", (err) => {
+  if (err) {
+    console.error("Error opening the database:", err.message);
+  } else {
+    console.log("Users database loaded successfully");
+    // Create Users table if it does not exist
+    userDb.run(
+      `CREATE TABLE IF NOT EXISTS Users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password TEXT
+      )`,
+      (err) => {
+        if (err) {
+          console.error("Error creating Users table:", err.message);
+        }
+      }
+    );
+  }
 });
 
-// Create User table
-sequelize.query(
-  `CREATE TABLE IF NOT EXISTS Users (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    username TEXT UNIQUE,
-    password TEXT
-  )`
-);
-
-// register user
+// Register user
 app.post("/register", async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    // hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // insert user into database
-    await sequelize.query(
-      `INSERT INTO Users (username, password) VALUES (?, ?)`,
-      { replacements: [username, hashedPassword] }
-    );
+    const query = `INSERT INTO Users (username, password) VALUES (?, ?)`;
 
-    res.status(201).json({ message: "User registered successfully." });
+    userDb.run(query, [username, hashedPassword], function (err) {
+      if (err) {
+        if (err.message.includes("UNIQUE constraint failed")) {
+          res.status(409).json({ error: "Username already exists." });
+        } else {
+          res.status(500).json({ error: "Error registering user." });
+        }
+      } else {
+        res.status(201).json({ message: "User registered successfully." });
+      }
+    });
   } catch (error) {
     console.error(error);
-    if (error.message.includes("UNIQUE constraint failed")) {
-      res.status(409).json({ error: "Username already exists." });
-    } else {
-      res.status(500).json({ error: "Error registering user." });
-    }
+    res.status(500).json({ error: "Error registering user." });
   }
 });
 
-// login user
+// Login user
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  try {
-    // search user
-    const [users] = await sequelize.query(
-      `SELECT * FROM Users WHERE username = ?`,
-      { replacements: [username] }
-    );
-    const user = users[0];
+  const query = `SELECT * FROM Users WHERE username = ?`;
 
-    // verify password
+  userDb.get(query, [username], async (err, user) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Error logging in." });
+    }
+
     if (user && (await bcrypt.compare(password, user.password))) {
-      // Store user information in session
       req.session.user = { username: user.username };
       res.json({ message: "Login successful.", username: user.username });
     } else {
       res.status(401).json({ error: "Invalid username or password." });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error logging in." });
-  }
+  });
 });
 
 // Middleware to protect routes
@@ -211,97 +213,104 @@ app.post("/logout", (req, res) => {
   });
 });
 
-// retrieve all users
-app.get("/users", async (req, res) => {
-  try {
-    const [users] = await sequelize.query(`SELECT username FROM Users`);
+// Retrieve all users
+app.get("/users", (req, res) => {
+  const query = `SELECT username FROM Users`;
 
-    res.json({ users: users.map((user) => user.username) });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Error retrieving users.");
-  }
+  userDb.all(query, [], (err, rows) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Error retrieving users.");
+    }
+    res.json({ users: rows.map((row) => row.username) });
+  });
 });
 
-// update user
+// Update user
 app.put("/users/:username", async (req, res) => {
-  console.log(req);
   const { username } = req.params;
   const { password, newUsername, newPassword } = req.body;
 
-  const transaction = await sequelize.transaction();
+  const transaction = await new Promise((resolve, reject) => {
+    userDb.serialize(() => {
+      userDb.run("BEGIN TRANSACTION", (err) => {
+        if (err) reject(err);
+        resolve();
+      });
+    });
+  });
 
   try {
-    // search user
-    const [users] = await sequelize.query(
-      `SELECT * FROM Users WHERE username = ?`,
-      { replacements: [username], transaction }
-    );
-    const user = users[0];
-
-    // verify password
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const updates = [];
-
-      if (newUsername) {
-        updates.push(`username = ?`);
-      }
-      if (newPassword) {
-        updates.push(`password = ?`);
+    const query = `SELECT * FROM Users WHERE username = ?`;
+    userDb.get(query, [username], async (err, user) => {
+      if (err) {
+        await new Promise((resolve) => userDb.run("ROLLBACK", resolve));
+        throw err;
       }
 
-      const updateQuery = `UPDATE Users SET ${updates.join(
-        ", "
-      )} WHERE username = ?`;
-      const replacements = [];
+      if (user && (await bcrypt.compare(password, user.password))) {
+        const updates = [];
+        const params = [];
 
-      if (newUsername) {
-        replacements.push(newUsername);
+        if (newUsername) {
+          updates.push("username = ?");
+          params.push(newUsername);
+        }
+        if (newPassword) {
+          updates.push("password = ?");
+          params.push(await bcrypt.hash(newPassword, 10));
+        }
+
+        const updateQuery = `UPDATE Users SET ${updates.join(
+          ", "
+        )} WHERE username = ?`;
+        params.push(username);
+
+        userDb.run(updateQuery, params, (err) => {
+          if (err) {
+            new Promise((resolve) => userDb.run("ROLLBACK", resolve));
+            return res.status(500).json({ error: "Error updating user." });
+          }
+
+          new Promise((resolve) => userDb.run("COMMIT", resolve));
+          res.json({ message: "User updated successfully." });
+        });
+      } else {
+        new Promise((resolve) => userDb.run("ROLLBACK", resolve));
+        res.status(401).json({ error: "Invalid username or password." });
       }
-      if (newPassword) {
-        replacements.push(await bcrypt.hash(newPassword, 10));
-      }
-      replacements.push(username);
-
-      await sequelize.query(updateQuery, { replacements, transaction });
-
-      await transaction.commit();
-      res.json({ message: "User updated successfully." });
-    } else {
-      await transaction.rollback();
-      res.status(401).json({ error: "Invalid username or password." });
-    }
+    });
   } catch (error) {
-    await transaction.rollback();
     console.error(error);
     res.status(500).json({ error: "Error updating user." });
   }
 });
 
-// delete user
-app.delete("/users/:username", async (req, res) => {
+// Delete user
+app.delete("/users/:username", (req, res) => {
   const { username } = req.params;
   const { password } = req.body;
 
-  try {
-    const [users] = await sequelize.query(
-      `SELECT * FROM Users WHERE username = ?`,
-      { replacements: [username] }
-    );
-    const user = users[0];
+  const query = `SELECT * FROM Users WHERE username = ?`;
+
+  userDb.get(query, [username], async (err, user) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: "Error deleting user." });
+    }
 
     if (user && (await bcrypt.compare(password, user.password))) {
-      await sequelize.query(`DELETE FROM Users WHERE username = ?`, {
-        replacements: [username],
+      userDb.run(`DELETE FROM Users WHERE username = ?`, [username], (err) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: "Error deleting user." });
+        }
+        res.json({ message: "User deleted successfully." });
       });
-      res.json({ message: "User deleted successfully." });
     } else {
       res.status(401).json({ error: "Invalid username or password." });
     }
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error deleting user." });
-  }
+  });
 });
 
 // Routes
