@@ -131,7 +131,7 @@ $(function () {
     }
 
     try {
-      const response = await fetch("/add-word", {
+      const response = await fetch("/words/add-word", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -190,7 +190,7 @@ $(function () {
     if (!confirmed) return;
 
     try {
-      const response = await fetch(`/delete-word/${wordId}`, {
+      const response = await fetch(`/words/delete-word/${wordId}`, {
         method: "DELETE",
       });
 
