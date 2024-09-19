@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Fetch data from server
   async function fetchData(url, body = null, method = "POST") {
     try {
-      const response = await fetch(`http://localhost:8080${url}`, {
+      const response = await fetch(`http://localhost:8080/users/${url}`, {
         method,
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
