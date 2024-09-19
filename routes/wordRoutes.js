@@ -10,20 +10,40 @@ const db = new sqlite3.Database("vocabulary.sqlite3.db", (err) => {
     console.log("Vocabulary database loaded successfully");
   }
 });
-
-// Retrieve all words
+// Retrieve words with pagination
 router.get("/", (req, res) => {
-  const query = `
-    SELECT id, english, indefinite_singular AS indefiniteSingular,
-    definite_singular AS definiteSingular, indefinite_plural AS indefinitePlural,
-    definite_plural AS definitePlural, example_sentence AS example, is_custom
-    FROM Wordpage__nouns`;
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10; //  10 items per page
+  const offset = (page - 1) * limit;
 
-  db.all(query, [], (err, rows) => {
+  const query = `
+      SELECT id, english, indefinite_singular AS indefiniteSingular,
+      definite_singular AS definiteSingular, indefinite_plural AS indefinitePlural,
+      definite_plural AS definitePlural, example_sentence AS example, is_custom
+      FROM Wordpage__nouns
+      LIMIT ? OFFSET ?`;
+
+  db.all(query, [limit, offset], (err, rows) => {
     if (err) {
       return console.error(err.message);
     }
-    res.render("wordpage", { words: rows });
+
+    // Get total count for pagination purposes
+    const countQuery = `SELECT COUNT(*) AS count FROM Wordpage__nouns`;
+    db.get(countQuery, [], (countErr, countRow) => {
+      if (countErr) {
+        return console.error(countErr.message);
+      }
+
+      const totalItems = countRow.count;
+      const totalPages = Math.ceil(totalItems / limit);
+      res.render("wordpage", {
+        words: rows,
+        currentPage: page,
+        totalPages: totalPages,
+        limit: limit,
+      });
+    });
   });
 });
 
@@ -39,9 +59,9 @@ router.post("/add-word", (req, res) => {
   } = req.body;
 
   const query = `
-    INSERT INTO Wordpage__nouns (english, indefinite_singular, definite_singular,
-      indefinite_plural, definite_plural, example_sentence, is_custom)
-    VALUES (?, ?, ?, ?, ?, ?, 1)`;
+      INSERT INTO Wordpage__nouns (english, indefinite_singular, definite_singular,
+        indefinite_plural, definite_plural, example_sentence, is_custom)
+      VALUES (?, ?, ?, ?, ?, ?, 1)`;
 
   db.run(
     query,
@@ -57,7 +77,23 @@ router.post("/add-word", (req, res) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json({ message: "Word added successfully", id: this.lastID });
+
+      // Retrieve the total count of words after addition
+      const countQuery = `SELECT COUNT(*) AS count FROM Wordpage__nouns`;
+      db.get(countQuery, [], (countErr, countRow) => {
+        if (countErr) {
+          return res.status(500).json({ error: countErr.message });
+        }
+
+        const totalItems = countRow.count;
+        const totalPages = Math.ceil(totalItems / 10); //10items per page
+
+        res.json({
+          message: "Word added successfully",
+          id: this.lastID,
+          totalPages: totalPages,
+        });
+      });
     }
   );
 });

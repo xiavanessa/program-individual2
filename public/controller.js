@@ -112,6 +112,7 @@ slider();
 
 //wordpage
 //modal
+
 $(function () {
   $("#myModal").on("click", "#addWordButton", async function () {
     const body = {
@@ -142,33 +143,11 @@ $(function () {
       const result = await response.json();
 
       if (response.ok) {
-        // Word added successfully, append the new word to the table
+        // Word added successfully, notify the user
         alert("Word added successfully!");
 
-        // 添加新的行到表格，并设置正确的 data-id
-        const newRow = `
-          <tr>
-            <td>${body.english}</td>
-            <td>${body.indefiniteSingular}</td>
-            <td>${body.definiteSingular}</td>
-            <td>${body.indefinitePlural}</td>
-            <td>${body.definitePlural}</td>
-            <td>${body.example}</td>
-            <td>
-              <button
-                class="btn btn-danger btn-sm delete-word"
-                data-id="${result.id}"
-              >Delete</button>
-            </td>
-          </tr>
-        `;
-        // 将新行插入到表格的主体
-        $("table tbody").append(newRow);
-
-        // 清空输入框
-        $(
-          "#engelska, #indefinite--singular, #definite--singular, #indefinite--plural, #definite--plural, #example"
-        ).val("");
+        // Redirect to the last page to see the newly added word
+        window.location.href = `/words?page=${result.totalPages}&limit=10`;
       } else {
         console.error(result.error);
         alert("Failed to add word: " + result.error);
@@ -181,7 +160,6 @@ $(function () {
 });
 
 $(function () {
-  // 点击删除按钮，发送删除请求
   $("table").on("click", ".delete-word", async function () {
     const wordId = $(this).data("id");
     console.log("delete button clicked", wordId);

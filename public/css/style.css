@@ -96,6 +96,10 @@ body {
   margin-bottom: 30px;
 }
 
+.section--1__btn {
+  margin-bottom: 5px;
+}
+
 .feature-box {
   box-shadow: 0 2.4rem 4.8rem rgba(200, 200, 150, 0.4);
   border-radius: 11px;
@@ -260,6 +264,11 @@ body {
 
 .wordPage--nouns--table {
   font-size: 1rem;
+}
+
+/* pagination */
+.btn--next {
+  display: inline-block;
 }
 
 /* index.html */

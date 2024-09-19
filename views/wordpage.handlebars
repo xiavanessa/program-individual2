@@ -221,7 +221,6 @@
         </thead>
         <tbody>
           {{#each words}}
-            <!-- 循环渲染每一行的单词 -->
             <tr>
               <td>{{this.english}}</td>
               <td>{{this.indefiniteSingular}}</td>
@@ -231,7 +230,6 @@
               <td>{{this.example}}</td>
               <td>
                 {{#if this.is_custom}}
-                  <!-- 只为手动添加的单词显示删除按钮 -->
                   <button
                     class="btn btn-danger btn-sm delete-word"
                     data-id="{{this.id}}"
@@ -242,6 +240,38 @@
           {{/each}}
         </tbody>
       </table>
+
+      <div class="pagination">
+        {{#if (greaterThan currentPage 1)}}
+          <a
+            href="?page={{subtract currentPage 1}}&limit={{limit}}"
+            class="btn btn-primary"
+          ><span class="glyphicon glyphicon-arrow-left"></span> Previous</a>
+        {{/if}}
+
+        {{#if (lessThan currentPage totalPages)}}
+          <a
+            href="?page={{add currentPage 1}}&limit={{limit}}"
+            class="btn btn-primary"
+          >Next <span class="glyphicon glyphicon-arrow-right ml-2"></span></a>
+        {{/if}}
+
+        <span>Page {{currentPage}} of {{totalPages}}</span>
+      </div>
+
+      {{! 
+      <div class="wordpage--pagination text-center">
+        <button class="btn btn-primary pagination__btn--prev">
+          <span class="glyphicon glyphicon-arrow-left ml-2"></span>
+          <span>Page 1</span>
+        </button>
+
+        <button class="btn btn-primary pagination__btn--next">
+          <span>Page 3</span>
+          <span class="glyphicon glyphicon-arrow-right ml-2"></span>
+        </button>
+      </div> }}
+
     </div>
   </body>
 </html>

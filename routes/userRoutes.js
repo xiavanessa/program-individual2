@@ -183,6 +183,4 @@ router.delete("/users/:username", (req, res) => {
   });
 });
 
-// Other user-related routes (login, update, delete, etc.)
-
 module.exports = router;

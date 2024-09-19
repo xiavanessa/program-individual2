@@ -6,6 +6,16 @@ const session = require("express-session");
 const app = express();
 const port = 8080;
 
+// Register Handlebars helpers
+const hbs = engine({
+  helpers: {
+    add: (a, b) => a + b,
+    subtract: (a, b) => a - b,
+    greaterThan: (a, b) => a > b,
+    lessThan: (a, b) => a < b,
+  },
+});
+
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,9 +34,9 @@ app.use(
 );
 
 // set up handlebars as the view engine
-app.engine("handlebars", engine());
-app.set("view engine", "handlebars"); // Set the view engine to handlebars
-app.set("views", path.join(__dirname, "views")); // Set the views directory
+app.engine("handlebars", hbs);
+app.set("view engine", "handlebars");
+app.set("views", path.join(__dirname, "views"));
 
 // Import and use routes
 //user manangement system routes
