@@ -10,7 +10,8 @@ const db = new sqlite3.Database("vocabulary.sqlite3.db", (err) => {
     console.log("Vocabulary database loaded successfully");
   }
 });
-// Retrieve words with pagination
+
+// Retrieve words, pagination
 router.get("/", (req, res) => {
   const page = parseInt(req.query.page, 10) || 1;
   const limit = parseInt(req.query.limit, 10) || 10; //  10 items per page
@@ -28,7 +29,7 @@ router.get("/", (req, res) => {
       return console.error(err.message);
     }
 
-    // Get total count for pagination purposes
+    //total number of items
     const countQuery = `SELECT COUNT(*) AS count FROM Wordpage__nouns`;
     db.get(countQuery, [], (countErr, countRow) => {
       if (countErr) {
@@ -110,6 +111,46 @@ router.delete("/delete-word/:id", (req, res) => {
     }
     res.json({ message: "Word deleted successfully" });
   });
+});
+
+// Update a word
+router.put("/update-word/:id", (req, res) => {
+  const wordId = req.params.id;
+  const {
+    english,
+    indefiniteSingular,
+    definiteSingular,
+    indefinitePlural,
+    definitePlural,
+    example,
+  } = req.body;
+
+  console.log("Update word", wordId, english, indefiniteSingular);
+
+  const query = `
+      UPDATE Wordpage__nouns
+      SET english = ?, indefinite_singular = ?, definite_singular = ?, indefinite_plural = ?, definite_plural = ?, example_sentence = ?
+      WHERE id = ? AND is_custom = 1
+    `;
+
+  db.run(
+    query,
+    [
+      english,
+      indefiniteSingular,
+      definiteSingular,
+      indefinitePlural,
+      definitePlural,
+      example,
+      wordId,
+    ],
+    function (err) {
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      res.json({ message: "Word updated successfully" });
+    }
+  );
 });
 
 module.exports = router;

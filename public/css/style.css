@@ -231,7 +231,6 @@ body {
 }
 
 .dots__dot--active {
-  /* background-color: #fff; */
   background-color: #888;
   opacity: 1;
 }
@@ -263,7 +262,7 @@ body {
 }
 
 .wordPage--nouns--table {
-  font-size: 1rem;
+  font-size: 0.8rem;
 }
 
 /* pagination */
@@ -300,6 +299,11 @@ body {
   margin-bottom: 15px;
 }
 
+.edit-word,
+.delete-word {
+  font-size: 7px;
+}
+
 /* screen size */
 
 @media (min-width: 550px) {
@@ -313,6 +317,11 @@ body {
 
   .wordPage--nouns--table {
     font-size: 1.6rem;
+  }
+
+  .edit-word,
+  .delete-word {
+    font-size: 1.3rem;
   }
 }
 

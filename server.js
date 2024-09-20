@@ -63,9 +63,9 @@ app.get("/website", function (req, res) {
   res.sendFile(path.join(__dirname, "website.html"));
 });
 
-app.get("/wordpage", function (req, res) {
-  res.sendFile(path.join(__dirname, "wordPage.html"));
-});
+// app.get("/wordpage", function (req, res) {
+//   res.sendFile(path.join(__dirname, "wordPage.html"));
+// });
 
 app.get("/contact", function (req, res) {
   res.sendFile(path.join(__dirname, "contact.html"));

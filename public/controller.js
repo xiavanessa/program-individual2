@@ -186,3 +186,79 @@ $(function () {
     }
   });
 });
+
+// Edit word
+$(document).on("click", ".edit-word", function () {
+  const wordId = $(this).data("id");
+  const english = $(this).data("english");
+  const indefiniteSingular = $(this).data("indefinite-singular");
+  const definiteSingular = $(this).data("definite-singular");
+  const indefinitePlural = $(this).data("indefinite-plural");
+  const definitePlural = $(this).data("definite-plural");
+  const example = $(this).data("example");
+
+  // Fill the form with the existing data
+  $("#wordId").val(wordId);
+  $("#english").val(english);
+  $("#indefiniteSingular").val(indefiniteSingular);
+  $("#definiteSingular").val(definiteSingular);
+  $("#indefinitePlural").val(indefinitePlural);
+  $("#definitePlural").val(definitePlural);
+  $("#old-example").val(example);
+
+  // Show the modal (if not automatically triggered by data-toggle)
+  $("#editWordModal").modal("show");
+});
+
+// Submit the form to update the word
+$("#editWordForm").submit(async function (e) {
+  e.preventDefault();
+
+  const wordId = $("#wordId").val();
+  const english = $("#english").val();
+  const indefiniteSingular = $("#indefiniteSingular").val();
+  const definiteSingular = $("#definiteSingular").val();
+  const indefinitePlural = $("#indefinitePlural").val();
+  const definitePlural = $("#definitePlural").val();
+  const example = $("#old-example").val();
+
+  console.log(
+    wordId,
+    english,
+    indefiniteSingular,
+    definiteSingular,
+    indefinitePlural,
+    definitePlural,
+    example
+  );
+
+  // Send updated data to the server
+  try {
+    const response = await fetch(`/words/update-word/${wordId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        english: english,
+        indefiniteSingular: indefiniteSingular,
+        definiteSingular: definiteSingular,
+        indefinitePlural: indefinitePlural,
+        definitePlural: definitePlural,
+        example: example,
+      }),
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      alert(result.message);
+      location.reload(); // Optionally, reload the page to see the updated data
+    } else {
+      alert("Error updating the word: " + result.error);
+    }
+  } catch (err) {
+    alert("Error updating the word");
+    console.error(err);
+  }
+});
