@@ -59,7 +59,7 @@ document.addEventListener("DOMContentLoaded", () => {
   //jump to website
   function jumpToWebsite(duration = 3000) {
     setTimeout(() => {
-      window.location.href = "/website";
+      window.location.href = "/home";
     }, duration);
   }
 
