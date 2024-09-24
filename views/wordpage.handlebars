@@ -2,12 +2,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/bootstrap.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <title>Vanessa's Swedish Learning Website</title>
-    <script src="/jquery-3.7.1.js" defer></script>
+    {{! <link rel="stylesheet" href="/css/bootstrap.css" /> }}
+    {{! <link rel="stylesheet" href="/css/style.css" /> }}
+    {{! <title>Vanessa's Swedish Learning Website</title> }}
+    {{! <script src="/jquery-3.7.1.js" defer></script>
     <script src="/bootstrap.min.js" defer></script>
-    <script src="/controller.js" defer></script>
+    <script src="/controller.js" defer></script> }}
   </head>
 
   <body class="wordPage--body">
@@ -31,7 +31,6 @@
                   <a href="/words">Nouns (Substantiv)</a>
                 </li>
                 <li><a href="#">Verbs (Verb)</a></li>
-                <li><a href="#">Jasper Report</a></li>
                 <li class="divider"></li>
                 <li><a href="#">Adjectives (Adjektiv)</a></li>
                 <li class="divider"></li>
@@ -210,25 +209,33 @@
       <table class="table table-hover table-responsive wordPage--nouns--table">
         <thead>
           <tr>
-            <th>Engelska</th>
-            <th>Indefinite Singular</th>
-            <th>Definite Singular</th>
-            <th>Indefinite Plural</th>
-            <th>Definite Plural</th>
-            <th>Example</th>
-            <th>Actions</th>
+            <th class="wordPage--nouns--table--word">Engelska</th>
+            <th class="wordPage--nouns--table--word">Indefinite Singular</th>
+            <th class="wordPage--nouns--table--word">Definite Singular</th>
+            <th class="wordPage--nouns--table--word">Indefinite Plural</th>
+            <th class="wordPage--nouns--table--word">Definite Plural</th>
+            <th class="wordPage--nouns--table--word">Example</th>
+            <th class="wordPage--nouns--table--word">Actions</th>
           </tr>
         </thead>
         <tbody>
           {{#each words}}
             <tr>
-              <td>{{this.english}}</td>
-              <td>{{this.indefiniteSingular}}</td>
-              <td>{{this.definiteSingular}}</td>
-              <td>{{this.indefinitePlural}}</td>
-              <td>{{this.definitePlural}}</td>
-              <td>{{this.example}}</td>
-              <td>
+              <td class="wordPage--nouns--table--word">{{this.english}}</td>
+              <td
+                class="wordPage--nouns--table--word"
+              >{{this.indefiniteSingular}}</td>
+              <td
+                class="wordPage--nouns--table--word"
+              >{{this.definiteSingular}}</td>
+              <td
+                class="wordPage--nouns--table--word"
+              >{{this.indefinitePlural}}</td>
+              <td
+                class="wordPage--nouns--table--word"
+              >{{this.definitePlural}}</td>
+              <td class="wordPage--nouns--table--word">{{this.example}}</td>
+              <td class="wordPage--nouns--table--word">
                 {{#if this.is_custom}}
 
                   <button

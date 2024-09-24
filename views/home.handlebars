@@ -2,12 +2,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/bootstrap.css" />
+    {{! <link rel="stylesheet" href="/css/bootstrap.css" />
     <link rel="stylesheet" href="/css/style.css" />
     <title>Vanessa's Swedish Learning Website</title>
     <script src="/jquery-3.7.1.js" defer></script>
     <script src="/bootstrap.min.js" defer></script>
-    <script src="/controller.js" defer></script>
+    <script src="/controller.js" defer></script> }}
   </head>
 
   <body>
@@ -41,14 +41,12 @@
                 <li><a href="#">Common Phrases (Vanliga Fraser)</a></li>
               </ul>
             </li>
-            <li><a href="#">Grammatik</a></li>
             <li><a href="#">Läsning</a></li>
-            <li><a href="#">Lyssning</a></li>
+            <!-- <li><a href="#">Grammatik</a></li> -->
+            <!-- <li><a href="#">Lyssning</a></li> -->
             <li><a href="/about">About</a></li>
             <li><a href="#">Contact</a></li>
-            <li>
-              <button id="logoutButton" class="btn btn-danger btn-sm">Log Out</button>
-            </li>
+            <li><button id="logoutButton" class="btn btn-danger btn-sm">Log Out</button></li>
           </ul>
         </div>
       </nav>
@@ -75,6 +73,14 @@
 
     <main>
       <section id="section--1" class="panel">
+        <div class="pagination"></div>
+            <a
+              href="?page={{#if (equal currentPage totalPages)}}1{{else}}{{add currentPage 1}}{{/if}}&limit={{limit}}"
+              class="btn"
+            >
+               <span class="glyphicon glyphicon-refresh"></span>
+            </a>
+          </div>
         <div class="container">
           <div class="row">
             {{#each words}}
@@ -159,9 +165,7 @@
             {{/each}}
           </div>
 
-          <div class="text-center mt-4"></div>
-          <button id="loadMore" class="btn btn-primary">Ladda fler ord</button>
-        </div>
+          
       </section>
 
       <section id="section--2">

@@ -10,43 +10,86 @@ let db = new sqlite3.Database("homeSection1.sqlite3.db", (err) => {
   console.log("Connected to the words database.");
 });
 
-// 返回 JSON 数据
-router.get("/words", (req, res) => {
-  const page = parseInt(req.query.page) || 0;
-  const limit = 6;
-  const offset = page * limit;
+// helper function to get total number of items
+function getTotalItems(callback) {
+  const countQuery = "SELECT COUNT(*) AS count FROM Words";
+  db.get(countQuery, (err, row) => {
+    if (err) {
+      return callback(err, null);
+    }
+    callback(null, row.count);
+  });
+}
 
-  db.all(
-    `SELECT Words.id, Words.word, Words.word_class, Words.word_forms, Words.word_definition, Details.example_1, Details.example_1_translation, 
-          Details.example_2, Details.example_2_translation
-          FROM Words 
-          INNER JOIN Details ON Words.id = Details.word_id LIMIT ? OFFSET ?`,
-    [limit, offset],
-    (err, rows) => {
+router.get("/words", (req, res) => {
+  const page = parseInt(req.query.page) || 1; //default page 1
+  const limit = 6; //6 per page
+  const offset = (page - 1) * limit;
+
+  getTotalItems((err, totalItems) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    const totalPages = Math.ceil(totalItems / limit); // total pages
+
+    // count the total number of items
+    const query = `
+        SELECT Words.id, Words.word, Words.word_class, Words.word_forms, Words.word_definition, 
+               Details.example_1, Details.example_1_translation, Details.example_2, Details.example_2_translation
+        FROM Words 
+        INNER JOIN Details ON Words.id = Details.word_id 
+        LIMIT ? OFFSET ?`;
+
+    db.all(query, [limit, offset], (err, rows) => {
       if (err) {
         return res.status(500).json({ error: err.message });
       }
-      res.json(rows); // 返回 JSON 数据
-    }
-  );
+
+      res.json({
+        words: rows,
+        currentPage: page,
+        totalPages: totalPages,
+        totalItems: totalItems,
+        limit: limit,
+      });
+    });
+  });
 });
 
-// 渲染 home 页面
+// render home page
 router.get("/", (req, res) => {
-  const limit = 6; // 初始加载时限制显示的单词数量
-  db.all(
-    `SELECT Words.id, Words.word, Words.word_class, Words.word_forms, Words.word_definition, Details.example_1, Details.example_1_translation, 
-          Details.example_2, Details.example_2_translation
-          FROM Words 
-          INNER JOIN Details ON Words.id = Details.word_id LIMIT ?`,
-    [limit],
-    (err, rows) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = 6;
+  const offset = (page - 1) * limit;
+
+  getTotalItems((err, totalItems) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+
+    const totalPages = Math.ceil(totalItems / limit);
+
+    const query = `
+        SELECT Words.id, Words.word, Words.word_class, Words.word_forms, Words.word_definition, 
+               Details.example_1, Details.example_1_translation, Details.example_2, Details.example_2_translation
+        FROM Words 
+        INNER JOIN Details ON Words.id = Details.word_id 
+        LIMIT ? OFFSET ?`;
+
+    db.all(query, [limit, offset], (err, rows) => {
       if (err) {
         return console.error(err.message);
       }
-      res.render("home", { words: rows }); // 渲染页面
-    }
-  );
+
+      res.render("home", {
+        words: rows,
+        currentPage: page,
+        totalPages: totalPages,
+        limit: limit,
+      });
+    });
+  });
 });
 
 module.exports = router;

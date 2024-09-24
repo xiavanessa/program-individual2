@@ -64,6 +64,7 @@ body {
 
 .header__title {
   /* display: flex; */
+  background-color: #667bc6;
   align-items: center;
   justify-content: center;
   gap: 8rem;
@@ -263,7 +264,12 @@ body {
 }
 
 .wordPage--nouns--table {
-  font-size: 0.8rem;
+  font-size: 1rem;
+}
+
+.table > thead > tr > .wordPage--nouns--table--word,
+.table > tbody > tr > .wordPage--nouns--table--word {
+  padding: 2px;
 }
 
 /* pagination */
@@ -323,6 +329,11 @@ body {
   .edit-word,
   .delete-word {
     font-size: 1.3rem;
+  }
+
+  .table > thead > tr > .wordPage--nouns--table--word,
+  .table > tbody > tr > .wordPage--nouns--table--word {
+    padding: 8px;
   }
 }
 

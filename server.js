@@ -13,6 +13,7 @@ const hbs = engine({
     subtract: (a, b) => a - b,
     greaterThan: (a, b) => a > b,
     lessThan: (a, b) => a < b,
+    equal: (a, b) => a === b,
   },
 });
 
@@ -62,9 +63,9 @@ app.get("/index", function (req, res) {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-app.get("/website", function (req, res) {
-  res.sendFile(path.join(__dirname, "website.html"));
-});
+// app.get("/website", function (req, res) {
+//   res.sendFile(path.join(__dirname, "website.html"));
+// });
 
 // app.get("/wordpage", function (req, res) {
 //   res.sendFile(path.join(__dirname, "wordPage.html"));

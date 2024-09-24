@@ -113,8 +113,10 @@ slider();
 
 //wordpage
 //modal
+// Add a word
 $(function () {
   $("#myModal").on("click", "#addWordButton", async function () {
+    // Get the values from the form
     const body = {
       english: $("#engelska").val(),
       indefiniteSingular: $("#indefinite--singular").val(),
@@ -262,36 +264,3 @@ $("#editWordForm").submit(async function (e) {
     console.error(err);
   }
 });
-
-function refreshDailyWords() {
-  let currentPage = 0; // 用于追踪当前单词组
-
-  document.getElementById("loadMore").addEventListener("click", () => {
-    currentPage++; // 更新页数
-
-    fetch(`/home/words?page=${currentPage}`)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data.length === 0) {
-          // 如果没有更多数据，则禁用按钮
-          document.getElementById("loadMore").disabled = true;
-          return;
-        }
-
-        const template = Handlebars.compile(
-          document.getElementById("words-template").innerHTML
-        );
-
-        // 将新单词添加到现有行中
-        document.querySelector(".row").innerHTML += template(data);
-      })
-      .catch((error) => console.error("Error fetching words:", error));
-  });
-}
-
-refreshDailyWords();
