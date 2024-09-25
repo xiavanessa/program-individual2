@@ -387,3 +387,99 @@ $("#editWordForm").submit(async function (e) {
     console.error(err);
   }
 });
+
+const searchWords = function () {
+  const searchButton = document.getElementById("searchButton");
+  const searchInput = document.getElementById("searchWord");
+  const nounsTableBody = document.getElementById("nounsTableBody");
+  const paginationDiv = document.getElementById("pagination");
+  const backButton = document.getElementById("backButton");
+  if (
+    !searchButton ||
+    !searchInput ||
+    !nounsTableBody ||
+    !paginationDiv ||
+    !backButton
+  )
+    return;
+
+  searchButton.addEventListener("click", function () {
+    const searchTerm = searchInput.value.trim();
+
+    if (searchTerm) {
+      const url = `http://localhost:8080/words/search?q=${encodeURIComponent(
+        searchTerm
+      )}`;
+
+      // Fetch API to perform the search
+      fetch(url)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+          return response.json(); // Assume backend returns JSON data
+        })
+        .then((data) => {
+          // Clear current table
+          nounsTableBody.innerHTML = "";
+
+          // Populate the table with search results
+          data.words.forEach((word) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td>${word.english}</td>
+                <td>${word.indefiniteSingular}</td>
+                <td>${word.definiteSingular}</td>
+                <td>${word.indefinitePlural}</td>
+                <td>${word.definitePlural}</td>
+                <td>${word.example}</td>
+                <td>
+                  ${
+                    word.is_custom
+                      ? `<button class="btn btn-primary btn-xs edit-word" data-id="${word.id}">Edit</button>
+                  <button class="btn btn-danger btn-xs delete-word" data-id="${word.id}">Delete</button>`
+                      : ""
+                  }
+                </td>
+              `;
+            nounsTableBody.appendChild(row);
+          });
+
+          // Update pagination information
+          paginationDiv.innerHTML = `
+              ${
+                data.currentPage > 1
+                  ? `<a href="?page=${data.currentPage - 1}&limit=${
+                      data.limit
+                    }" class="btn btn-primary">Previous</a>`
+                  : ""
+              }
+              ${
+                data.currentPage < data.totalPages
+                  ? `<a href="?page=${data.currentPage + 1}&limit=${
+                      data.limit
+                    }" class="btn btn-primary">Next</a>`
+                  : ""
+              }
+              <span>Page ${data.currentPage} of ${data.totalPages}</span>
+            `;
+
+          // Show the "Back" button
+          backButton.style.display = "block";
+        })
+        .catch((error) => {
+          console.error("Error fetching words:", error);
+        });
+    }
+  });
+
+  // Back button functionality: reloads the original page (all words)
+  backButton.addEventListener("click", function () {
+    // Simply reload the page to get the full list of words
+    window.location.href = "http://localhost:8080/words";
+    // Hide the "Back" button
+    backButton.style.display = "none";
+  });
+};
+
+searchWords();

@@ -155,9 +155,9 @@ router.put("/update-word/:id", (req, res) => {
 
 //search
 router.get("/search", (req, res) => {
-  const searchTerm = req.query.q; // 获取查询参数
-  const page = parseInt(req.query.page, 10) || 1; // 默认页码
-  const limit = parseInt(req.query.limit, 10) || 10; // 每页数量
+  const searchTerm = req.query.q;
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 10;
   const offset = (page - 1) * limit;
 
   const query = `
@@ -165,25 +165,23 @@ router.get("/search", (req, res) => {
       definite_singular AS definiteSingular, indefinite_plural AS indefinitePlural,
       definite_plural AS definitePlural, example_sentence AS example, is_custom
       FROM Wordpage__nouns
-      WHERE english LIKE ? -- 使用 LIKE 语句进行模糊匹配
+      WHERE english LIKE ?
       LIMIT ? OFFSET ?`;
 
-  // 用通配符包裹搜索词以实现模糊查询
   db.all(query, [`%${searchTerm}%`, limit, offset], (err, rows) => {
     if (err) {
-      return console.error(err.message);
+      return res.status(500).json({ error: err.message });
     }
 
-    // 获取总条目数
     const countQuery = `SELECT COUNT(*) AS count FROM Wordpage__nouns WHERE english LIKE ?`;
     db.get(countQuery, [`%${searchTerm}%`], (countErr, countRow) => {
       if (countErr) {
-        return console.error(countErr.message);
+        return res.status(500).json({ error: countErr.message });
       }
 
       const totalItems = countRow.count;
       const totalPages = Math.ceil(totalItems / limit);
-      res.render("wordpage", {
+      res.json({
         words: rows,
         currentPage: page,
         totalPages: totalPages,

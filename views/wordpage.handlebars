@@ -193,10 +193,22 @@
               placeholder="search words..."
             />
             <span class="input-group-btn">
-              <button class="btn btn-primary" type="button">Search</button>
+              <button
+                class="btn btn-primary"
+                id="searchButton"
+                type="button"
+              >Search</button>
             </span>
           </div>
         </div>
+      </div>
+
+      <div class="text-center">
+        <button
+          id="backButton"
+          class="btn btn-secondary"
+          style="display: none;"
+        >Back</button>
       </div>
 
       <!-- table nouns -->
@@ -212,7 +224,7 @@
             <th class="wordPage--nouns--table--head">Actions</th>
           </tr>
         </thead>
-        <tbody>
+        <tbody id="nounsTableBody">
           {{#each words}}
             <tr>
               <td class="wordPage--nouns--table--word">{{this.english}}</td>
@@ -347,7 +359,7 @@
         </div>
       </div>
 
-      <div class="pagination">
+      <div class="pagination" id="pagination">
         {{#if (greaterThan currentPage 1)}}
           <a
             href="?page={{subtract currentPage 1}}&limit={{limit}}"
