@@ -165,30 +165,69 @@ router.get("/search", (req, res) => {
       definite_singular AS definiteSingular, indefinite_plural AS indefinitePlural,
       definite_plural AS definitePlural, example_sentence AS example, is_custom
       FROM Wordpage__nouns
-      WHERE english LIKE ?
+      WHERE english LIKE ?  
+      OR indefinite_singular LIKE ?
+      OR definite_singular LIKE ?
+      OR indefinite_plural LIKE ?
+      OR definite_plural LIKE ?
       LIMIT ? OFFSET ?`;
 
-  db.all(query, [`%${searchTerm}%`, limit, offset], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-
-    const countQuery = `SELECT COUNT(*) AS count FROM Wordpage__nouns WHERE english LIKE ?`;
-    db.get(countQuery, [`%${searchTerm}%`], (countErr, countRow) => {
-      if (countErr) {
-        return res.status(500).json({ error: countErr.message });
+  db.all(
+    query,
+    [
+      `%${searchTerm}%`,
+      `%${searchTerm}%`,
+      `%${searchTerm}%`,
+      `%${searchTerm}%`,
+      `%${searchTerm}%`,
+      limit,
+      offset,
+    ],
+    (err, rows) => {
+      if (err) {
+        return res.status(500).json({ error: err.message });
       }
 
-      const totalItems = countRow.count;
-      const totalPages = Math.ceil(totalItems / limit);
-      res.json({
-        words: rows,
-        currentPage: page,
-        totalPages: totalPages,
-        limit: limit,
-      });
-    });
-  });
+      if (rows.length === 0) {
+        return res.json({ found: false, message: "No results found." });
+      }
+
+      // Count query for pagination
+      const countQuery = `
+          SELECT COUNT(*) AS count FROM Wordpage__nouns
+          WHERE english LIKE ? 
+          OR indefinite_singular LIKE ?
+          OR definite_singular LIKE ?
+          OR indefinite_plural LIKE ?
+          OR definite_plural LIKE ?`;
+
+      db.get(
+        countQuery,
+        [
+          `%${searchTerm}%`, // for english
+          `%${searchTerm}%`, // for indefinite_singular
+          `%${searchTerm}%`, // for definite_singular
+          `%${searchTerm}%`, // for indefinite_plural
+          `%${searchTerm}%`, // for definite_plural
+        ],
+        (countErr, countRow) => {
+          if (countErr) {
+            return res.status(500).json({ error: countErr.message });
+          }
+
+          const totalItems = countRow.count;
+          const totalPages = Math.ceil(totalItems / limit);
+
+          res.json({
+            words: rows,
+            currentPage: page,
+            totalPages: totalPages,
+            limit: limit,
+          });
+        }
+      );
+    }
+  );
 });
 
 module.exports = router;

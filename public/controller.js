@@ -420,19 +420,33 @@ const searchWords = function () {
           return response.json(); // Assume backend returns JSON data
         })
         .then((data) => {
-          // Clear current table
-          nounsTableBody.innerHTML = "";
+          console.log(data);
+          if (data.found === false) {
+            // If no results found, show alert box
+            showAlert("No results found for your search.");
+          }
 
-          // Populate the table with search results
-          data.words.forEach((word) => {
-            const row = document.createElement("tr");
-            row.innerHTML = `
-                <td>${word.english}</td>
-                <td>${word.indefiniteSingular}</td>
-                <td>${word.definiteSingular}</td>
-                <td>${word.indefinitePlural}</td>
-                <td>${word.definitePlural}</td>
-                <td>${word.example}</td>
+          if (data.words.length > 0) {
+            nounsTableBody.innerHTML = "";
+
+            // Populate the table with search results
+            data.words.forEach((word) => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td  class="wordPage--nouns--table--word">${word.english}</td>
+                <td  class="wordPage--nouns--table--word">${
+                  word.indefiniteSingular
+                }</td>
+                <td  class="wordPage--nouns--table--word">${
+                  word.definiteSingular
+                }</td>
+                <td  class="wordPage--nouns--table--word">${
+                  word.indefinitePlural
+                }</td>
+                <td  class="wordPage--nouns--table--word">${
+                  word.definitePlural
+                }</td>
+                <td  class="wordPage--nouns--table--word">${word.example}</td>
                 <td>
                   ${
                     word.is_custom
@@ -442,11 +456,11 @@ const searchWords = function () {
                   }
                 </td>
               `;
-            nounsTableBody.appendChild(row);
-          });
+              nounsTableBody.appendChild(row);
+            });
 
-          // Update pagination information
-          paginationDiv.innerHTML = `
+            // Update pagination information
+            paginationDiv.innerHTML = `
               ${
                 data.currentPage > 1
                   ? `<a href="?page=${data.currentPage - 1}&limit=${
@@ -464,8 +478,9 @@ const searchWords = function () {
               <span>Page ${data.currentPage} of ${data.totalPages}</span>
             `;
 
-          // Show the "Back" button
-          backButton.style.display = "block";
+            // Show the "Back" button
+            backButton.style.display = "block";
+          }
         })
         .catch((error) => {
           console.error("Error fetching words:", error);
@@ -481,5 +496,15 @@ const searchWords = function () {
     backButton.style.display = "none";
   });
 };
+
+function showAlert(message) {
+  const alertBox = document.getElementById("alertBox");
+  if (!alertBox) return;
+  alertBox.innerHTML = message;
+  alertBox.style.display = "block";
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 3000); // 3000 milliseconds = 3 seconds
+}
 
 searchWords();

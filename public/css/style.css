@@ -272,6 +272,14 @@ body {
   padding: 0px;
 }
 
+#alertBox {
+  display: none;
+}
+
+#backButton {
+  display: none;
+}
+
 .wordPage--nouns--table {
   font-size: 1rem;
 }
