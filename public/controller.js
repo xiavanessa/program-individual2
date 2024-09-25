@@ -26,7 +26,130 @@ const navLogout = () => {
 };
 navLogout();
 
-//slider
+//home page
+//Section1 refresh btn
+const homeSection1Refresh = function () {
+  const paginationButton = document.querySelector(".home-pagination__btn");
+  if (!document.querySelector(".home-pagination__btn")) return;
+
+  paginationButton.addEventListener("click", function (e) {
+    e.preventDefault();
+    const url = this.getAttribute("href"); // get the href attribute
+    console.log("Refreshing page with URL:", url);
+
+    // fetch the data
+    fetch(`http://localhost:8080/home${url}`)
+      .then((response) => {
+        console.log(response);
+        if (!response.ok) {
+          throw new Error("Network response was not ok " + response.statusText);
+        }
+        //parse the response data as JSON
+        return response.json();
+      })
+      .then((data) => {
+        // empty the current words container
+        const wordsContainer = document.querySelector(".homepage-section1-row");
+        wordsContainer.innerHTML = "";
+
+        // loop
+        data.words.forEach((word) => {
+          const wordHtml = `
+            <div class="col-1-of-6 col-md-4 col-sm-6 col-xs-12">
+              <div class="thumbnail feature-box">
+                <div class="feature-box__section--1">
+                  <h3><b>${word.word}</b></h3>
+                </div>
+                <div class="feature-box__section--2">
+                  <p><b>ORDKLASS: </b>${word.word_class}</p>
+                </div>
+                <div class="feature-box__section--3">
+                  <div class="feature-box__section--3__example">
+                    <p><b>1.&nbsp;</b><span>${word.example_1}</span></p>
+                  </div>
+                  <div class="feature-box__section--3__example">
+                    <p><b>2.&nbsp;</b><span>${word.example_2}</span></p>
+                  </div>
+                  <div class="text-center">
+                    <button
+                      class="btn section--1__btn"
+                      data-toggle="modal"
+                      data-target="#detailModal-${word.id}"
+                    >
+                      <span class="glyphicon glyphicon-search"></span>
+                      Läs mer
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Modal -->
+            <div
+              class="modal fade"
+              id="detailModal-${word.id}"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="detailModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="detailModalLabel">Detaljer om
+                      "${word.word}"</h5>
+                    <button
+                      type="button"
+                      class="close"
+                      data-dismiss="modal"
+                      aria-label="Close"
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <h3><b>${word.word}</b></h3>
+                    <p>${word.word_forms}</p>
+                    <hr />
+                    <h4><b>Definition</b></h4>
+                    <p>${word.word_definition}</p>
+                    <br />
+                    <h4><b>Examples</b></h4>
+                    <p>1. ${word.example_1}</p>
+                    <p>${word.example_1_translation}</p>
+                    <p>2. ${word.example_2}</p>
+                    <p>${word.example_2_translation}</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button
+                      type="button"
+                      class="btn btn-secondary"
+                      data-dismiss="modal"
+                    >Stäng</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          wordsContainer.insertAdjacentHTML("beforeend", wordHtml);
+        });
+
+        // update the pagination button href
+        const nextPage =
+          data.currentPage + 1 > data.totalPages ? 1 : data.currentPage + 1;
+        paginationButton.setAttribute(
+          "href",
+          `/words?page=${nextPage}&limit=${data.limit}`
+        );
+      })
+      .catch((error) => {
+        console.error("Error fetching words:", error);
+      });
+  });
+};
+homeSection1Refresh();
+
+//section 2 slider
 const slider = function () {
   const slides = document.querySelectorAll(".slide");
   const btnLeft = document.querySelector(".slider__btn--left");
@@ -264,123 +387,3 @@ $("#editWordForm").submit(async function (e) {
     console.error(err);
   }
 });
-
-const homeSection1Refresh = function () {
-  const paginationButton = document.querySelector(".home-pagination__btn");
-
-  paginationButton.addEventListener("click", function (e) {
-    e.preventDefault();
-    const url = this.getAttribute("href"); // get the href attribute
-    console.log("Refreshing page with URL:", url);
-
-    // fetch the data
-    fetch(`http://localhost:8080/home${url}`)
-      .then((response) => {
-        console.log(response);
-        if (!response.ok) {
-          throw new Error("Network response was not ok " + response.statusText);
-        }
-        //parse the response data as JSON
-        return response.json();
-      })
-      .then((data) => {
-        // empty the current words container
-        const wordsContainer = document.querySelector(".homepage-section1-row");
-        wordsContainer.innerHTML = "";
-
-        // loop
-        data.words.forEach((word) => {
-          const wordHtml = `
-            <div class="col-1-of-6 col-md-4 col-sm-6 col-xs-12">
-              <div class="thumbnail feature-box">
-                <div class="feature-box__section--1">
-                  <h3><b>${word.word}</b></h3>
-                </div>
-                <div class="feature-box__section--2">
-                  <p><b>ORDKLASS: </b>${word.word_class}</p>
-                </div>
-                <div class="feature-box__section--3">
-                  <div class="feature-box__section--3__example">
-                    <p><b>1.&nbsp;</b><span>${word.example_1}</span></p>
-                  </div>
-                  <div class="feature-box__section--3__example">
-                    <p><b>2.&nbsp;</b><span>${word.example_2}</span></p>
-                  </div>
-                  <div class="text-center">
-                    <button
-                      class="btn section--1__btn"
-                      data-toggle="modal"
-                      data-target="#detailModal-${word.id}"
-                    >
-                      <span class="glyphicon glyphicon-search"></span>
-                      Läs mer
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Modal -->
-            <div
-              class="modal fade"
-              id="detailModal-${word.id}"
-              tabindex="-1"
-              role="dialog"
-              aria-labelledby="detailModalLabel"
-              aria-hidden="true"
-            >
-              <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="detailModalLabel">Detaljer om
-                      "${word.word}"</h5>
-                    <button
-                      type="button"
-                      class="close"
-                      data-dismiss="modal"
-                      aria-label="Close"
-                    >
-                      <span aria-hidden="true">&times;</span>
-                    </button>
-                  </div>
-                  <div class="modal-body">
-                    <h3><b>${word.word}</b></h3>
-                    <p>${word.word_forms}</p>
-                    <hr />
-                    <h4><b>Definition</b></h4>
-                    <p>${word.word_definition}</p>
-                    <br />
-                    <h4><b>Examples</b></h4>
-                    <p>1. ${word.example_1}</p>
-                    <p>${word.example_1_translation}</p>
-                    <p>2. ${word.example_2}</p>
-                    <p>${word.example_2_translation}</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button
-                      type="button"
-                      class="btn btn-secondary"
-                      data-dismiss="modal"
-                    >Stäng</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `;
-          wordsContainer.insertAdjacentHTML("beforeend", wordHtml);
-        });
-
-        // update the pagination button href
-        const nextPage =
-          data.currentPage + 1 > data.totalPages ? 1 : data.currentPage + 1;
-        paginationButton.setAttribute(
-          "href",
-          `/words?page=${nextPage}&limit=${data.limit}`
-        );
-      })
-      .catch((error) => {
-        console.error("Error fetching words:", error);
-      });
-  });
-};
-homeSection1Refresh();

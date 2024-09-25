@@ -47,7 +47,7 @@ app.use("/users", userRoutes);
 const wordRoutes = require(path.join(__dirname, "routes/wordRoutes"));
 app.use("/words", wordRoutes);
 //homeSection1 routes
-const homeSection1 = require(path.join(__dirname, "routes/homeSection1"));
+const homeSection1 = require(path.join(__dirname, "routes/homeSection1Routes"));
 app.use("/home", homeSection1);
 
 // Routes
