@@ -82,6 +82,15 @@ body {
 }
 
 /* Section 1 */
+.home-pagination {
+  margin-left: 5%;
+}
+
+.home-pagination__btn {
+  font-size: 25px;
+  padding: 0;
+}
+
 #section--1 {
   background-color: var(--color-quaternary);
   margin: 0;
@@ -244,8 +253,8 @@ body {
 }
 
 .wordPage--nouns--add {
-  margin-top: 20px;
-  margin-right: 15px;
+  margin-top: 5%;
+  margin-right: 5%;
 }
 
 .wordPage--nouns {
@@ -267,7 +276,7 @@ body {
   font-size: 1rem;
 }
 
-.table > thead > tr > .wordPage--nouns--table--word,
+.table > thead > tr > .wordPage--nouns--table--head,
 .table > tbody > tr > .wordPage--nouns--table--word {
   padding: 2px;
 }
@@ -368,6 +377,11 @@ body {
 }
 
 @media (min-width: 992px) {
+  .btn-responsive {
+    font-size: 1.4rem;
+    padding: 5px 12px;
+  }
+
   .header__title__text {
     margin-top: 80px;
     line-height: 1.4;

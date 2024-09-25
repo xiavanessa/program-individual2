@@ -22,6 +22,7 @@ function getTotalItems(callback) {
 }
 
 router.get("/words", (req, res) => {
+  console.log("Received request for /words"); // 添加这一行
   const page = parseInt(req.query.page) || 1; //default page 1
   const limit = 6; //6 per page
   const offset = (page - 1) * limit;
@@ -46,13 +47,16 @@ router.get("/words", (req, res) => {
         return res.status(500).json({ error: err.message });
       }
 
-      res.json({
+      const response = {
         words: rows,
         currentPage: page,
         totalPages: totalPages,
         totalItems: totalItems,
         limit: limit,
-      });
+      };
+
+      console.log(response); // 打印响应内容到控制台
+      res.json(response); // 返回 JSON 响应
     });
   });
 });

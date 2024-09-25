@@ -74,10 +74,10 @@
     <main>
       <section id="section--1" class="panel">
         {{!-- pagination --}}
-        <div class="pagination">
+        <div class="home-pagination">
           <a
-            href="?page={{#if (equal currentPage totalPages)}}1{{else}}{{add currentPage 1}}{{/if}}&limit={{limit}}"
-            class="btn"
+            href="/words?page={{#if (equal currentPage totalPages)}}1{{else}}{{add currentPage 1}}{{/if}}&limit={{limit}}"
+            class="btn home-pagination__btn"
           >
               <span class="glyphicon glyphicon-refresh"></span>
           </a>
@@ -85,7 +85,7 @@
         
         {{!-- words --}}
         <div class="container">
-          <div class="row">
+          <div class="row homepage-section1-row ">
             {{#each words}}
               <div class="col-1-of-6 col-md-4 col-sm-6 col-xs-12">
                 <div class="thumbnail feature-box">
@@ -167,8 +167,6 @@
               </div>
             {{/each}}
           </div>
-
-
       </section>
 
       <section id="section--2">

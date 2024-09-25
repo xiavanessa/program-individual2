@@ -13,7 +13,7 @@ const db = new sqlite3.Database("vocabulary.sqlite3.db", (err) => {
 
 // Retrieve words, pagination
 router.get("/", (req, res) => {
-  const page = parseInt(req.query.page, 10) || 1;//default page 1
+  const page = parseInt(req.query.page, 10) || 1; //default page 1
   const limit = parseInt(req.query.limit, 10) || 10; //  10 items per page
   const offset = (page - 1) * limit;
 
