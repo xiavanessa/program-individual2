@@ -36,6 +36,7 @@ body {
 }
 
 .web-nav .navbar-nav > li > a {
+  text-transform: uppercase;
   color: #fdffd2;
 }
 
@@ -79,6 +80,7 @@ body {
 
 .header__title__img {
   margin-bottom: 5rem;
+  box-shadow: 0 3rem 6rem rgba(0, 0, 0, 0.1);
 }
 
 /* Section 1 */
@@ -248,7 +250,7 @@ body {
 
 /*wordPage*/
 /* nouns classification */
-.wordPage--body {
+.body {
   background-color: var(--color-primary);
 }
 
@@ -327,6 +329,86 @@ body {
 .delete-word {
   font-size: 7px;
 }
+
+.header__title__text {
+  font-weight: 700;
+  display: inline-block;
+  background-image: linear-gradient(
+    to right,
+    var(--color-quaternary),
+    var(--color-secondary)
+  );
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: 0.2rem;
+  transition: all 0.2s;
+}
+
+.feature-box {
+  border-radius: 3px;
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s;
+}
+
+.feature-box:hover {
+  transform: translateY(-1.5rem) scale(1.03);
+}
+
+/* about */
+.aboutPage-header,
+.contactPage-header,
+.aboutPage-header-tertiary {
+  font-size: 3.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-block;
+  background-image: linear-gradient(
+    to right,
+    var(--color-quaternary),
+    var(--color-secondary)
+  );
+  -webkit-background-clip: text;
+  color: transparent;
+  letter-spacing: 0.2rem;
+  transition: all 0.2s;
+}
+
+.contactPage-header:hover,
+.aboutPage-header:hover,
+.aboutPage-header-tertiary:hover,
+.header__title__text:hover {
+  transform: skewY(2deg) skewX(15deg) scale(1.1);
+  text-shadow: 0.5rem 1rem 2rem rgba(0, 0, 0, 0.2);
+}
+
+.aboutPage-header {
+  letter-spacing: 3rem;
+}
+
+.website-features {
+  margin: 40px 0;
+}
+
+.aboutPage-header-tertiary {
+  /* color: var(--color-tertiary); */
+  font-size: 1.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.aboutPage-header-tertiary-sub {
+  color: var(--color-tertiary);
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.aboutPage-header-tertiary-text {
+  color: var(--color-quaternary);
+  line-height: 1.6;
+}
+
+/* story */
 
 /* screen size */
 

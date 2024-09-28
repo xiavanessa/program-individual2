@@ -51,10 +51,6 @@ const homeSection1 = require(path.join(__dirname, "routes/homeSection1Routes"));
 app.use("/home", homeSection1);
 
 // Routes
-app.get("/about", (req, res) => {
-  res.render("about", { firstname: "Yehuda", lastname: "Katz" });
-});
-
 app.get("/", function (req, res) {
   res.send("Hello World");
 });
@@ -70,6 +66,10 @@ app.get("/index", function (req, res) {
 // app.get("/wordpage", function (req, res) {
 //   res.sendFile(path.join(__dirname, "wordPage.html"));
 // });
+
+app.get("/about", (req, res) => {
+  res.sendFile(path.join(__dirname, "about.html"));
+});
 
 app.get("/contact", function (req, res) {
   res.sendFile(path.join(__dirname, "contact.html"));

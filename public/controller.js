@@ -490,8 +490,9 @@ const searchWords = function () {
 
   // Back button functionality: reloads the original page (all words)
   backButton.addEventListener("click", function () {
+    const url = new URL(window.location.href);
     // Simply reload the page to get the full list of words
-    window.location.href = "http://localhost:8080/words";
+    window.location.href = url;
     // Hide the "Back" button
     backButton.style.display = "none";
   });

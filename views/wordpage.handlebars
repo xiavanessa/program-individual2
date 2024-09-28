@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   </head>
 
-  <body class="wordPage--body">
+  <body class="body">
     <!--nav-->
     <header class="header">
       <nav class="navbar navbar-default web-nav" role="navigation">
@@ -40,15 +40,21 @@
             <li><a href="#">Läsning</a></li>
             {{! <li><a href="#">Grammatik</a></li> }}
             {{! <li><a href="#">Lyssning</a></li> }}
-            <li><a href="#">About</a></li>
-            <li><a href="/about">Contact</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/contact">Contact</a></li>
             <li>
-              <button id="logoutButton" class="btn btn-danger btn-sm">Log Out</button>
+              <button id="logoutButton" class="btn btn-danger btn-sm">
+                LOG OUT
+              </button>
             </li>
           </ul>
         </div>
       </nav>
     </header>
+
+    {{! alert }}
+    <div id="alertBox" class="alert alert-warning" role="alert">
+    </div>
 
     <!-- Button trigger modal -->
     <div class="text-right wordPage--nouns--add">
@@ -180,10 +186,6 @@
 
     <!--vocabulary table-->
     <div class="container">
-      {{! alert }}
-      <div id="alertBox" class="alert alert-warning" role="alert">
-      </div>
-
       <h2 class="text-center wordPage--nouns">Nouns(Substantiv)</h2>
 
       <!-- search bar -->
