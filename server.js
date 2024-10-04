@@ -59,13 +59,6 @@ app.get("/index", function (req, res) {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// app.get("/website", function (req, res) {
-//   res.sendFile(path.join(__dirname, "website.html"));
-// });
-
-// app.get("/wordpage", function (req, res) {
-//   res.sendFile(path.join(__dirname, "wordPage.html"));
-// });
 
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "about.html"));
