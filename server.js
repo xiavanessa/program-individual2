@@ -52,13 +52,8 @@ app.use("/home", homeSection1);
 
 // Routes
 app.get("/", function (req, res) {
-  res.send("Hello World");
-});
-
-app.get("/index", function (req, res) {
   res.sendFile(path.join(__dirname, "index.html"));
 });
-
 
 app.get("/about", (req, res) => {
   res.sendFile(path.join(__dirname, "about.html"));

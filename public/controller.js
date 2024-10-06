@@ -6,7 +6,6 @@ function userManagementSystem() {
   const registerBtn = document.getElementById("register-btn");
   const updateBtn = document.getElementById("update-btn");
   const deleteBtn = document.getElementById("delete-btn");
-  const logoutBtn = document.getElementById("logout-btn");
   const notification = document.getElementById("notification");
   const allUsers = document.getElementById("all-users");
   const currentUser = document.getElementById("current-user");
@@ -14,12 +13,12 @@ function userManagementSystem() {
     document.documentElement
   ).getPropertyValue("--color-tertiary");
 
+  //if any of the elements are missing, return
   if (
     !loginBtn ||
     !registerBtn ||
     !updateBtn ||
     !deleteBtn ||
-    !logoutBtn ||
     !notification ||
     !allUsers ||
     !currentUser
@@ -61,13 +60,37 @@ function userManagementSystem() {
   }
 
   // Display notification
-  function displayNotification(message, color = "green", duration = 3000) {
-    notification.innerText = message;
-    notification.style.backgroundColor = color;
-    notification.style.display = "block";
-    setTimeout(() => {
-      notification.style.display = "none";
-    }, duration);
+  function displayNotification(
+    message,
+    color = "green",
+    countdown = null,
+    duration = 3000
+  ) {
+    if (countdown !== null) {
+      let currentCountdown = countdown;
+      notification.innerText = `${message} ${countdown + 1} seconds...`;
+      notification.style.backgroundColor = color;
+      notification.style.display = "block";
+      // Create an interval to update the countdown every second
+      const intervalId = setInterval(() => {
+        notification.innerText = `${message} ${currentCountdown} seconds...`;
+        currentCountdown--;
+
+        //hide the notification when countdown is 0
+        if (currentCountdown < 0) {
+          clearInterval(intervalId);
+          notification.style.display = "none";
+        }
+      }, 1000);
+    } else {
+      // No countdown, just display the message
+      notification.innerText = message;
+      notification.style.backgroundColor = color;
+      notification.style.display = "block";
+      setTimeout(() => {
+        notification.style.display = "none";
+      }, duration);
+    }
   }
 
   //jump to website
@@ -99,7 +122,7 @@ function userManagementSystem() {
         "Network or server error. Please try again later.",
         "red"
       );
-      throw error; // Rethrow to let the calling function handle it
+      throw error;
     }
   }
 
@@ -124,8 +147,11 @@ function userManagementSystem() {
       const data = await fetchData("/login", body);
       displayCurrentUser(data);
       displayNotification(
-        "Login successful! Redirecting to the website in 3 seconds..."
+        "Login successful! Redirecting to the website in",
+        "green",
+        2 // Pass countdown argument
       );
+
       jumpToWebsite();
     } catch (error) {
       clearCurrentUser();
@@ -210,30 +236,7 @@ function userManagementSystem() {
 
   // Initial fetch
   fetchUsers();
-
-  logoutBtn.addEventListener("click", async function () {
-    try {
-      const response = await fetch("/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.ok) {
-        // Logout was successful, redirect to the home or login page
-        window.location.href = "/contact"; // or wherever you want to redirect after logout
-      } else {
-        alert("Logout failed. Please try again.");
-      }
-    } catch (error) {
-      console.error("Error during logout:", error);
-      alert("Error during logout. Please try again.");
-    }
-  });
 }
-
-userManagementSystem();
 
 //navbar
 const navLogout = () => {
@@ -249,8 +252,8 @@ const navLogout = () => {
       });
 
       if (response.ok) {
-        // Logout was successful, redirect to the home or login page
-        window.location.href = "/index"; // or wherever you want to redirect after logout
+        // Logout was successful, redirect to the login page
+        window.location.href = "/";
       } else {
         alert("Logout failed. Please try again.");
       }
@@ -260,7 +263,6 @@ const navLogout = () => {
     }
   });
 };
-navLogout();
 
 //home page
 //Section1 refresh btn
@@ -383,7 +385,6 @@ const homeSection1Refresh = function () {
       });
   });
 };
-homeSection1Refresh();
 
 //section 2 slider
 const slider = function () {
@@ -468,207 +469,215 @@ const slider = function () {
     }
   });
 };
-slider();
 
 //wordpage
 //modal
-// Add a word
-$(function () {
-  $("#myModal").on("click", "#addWordButton", async function () {
-    // Get the values from the form
-    const body = {
-      english: $("#engelska").val(),
-      indefiniteSingular: $("#indefinite--singular").val(),
-      definiteSingular: $("#definite--singular").val(),
-      indefinitePlural: $("#indefinite--plural").val(),
-      definitePlural: $("#definite--plural").val(),
-      example: $("#example").val(),
-      isCustom: 1,
-    };
+const wordPageNounsModifyTable = function () {
+  // Add a word
+  $(function () {
+    $("#myModal").on("click", "#addWordButton", async function () {
+      // Get the values from the form
+      const body = {
+        english: $("#engelska").val(),
+        indefiniteSingular: $("#indefinite--singular").val(),
+        definiteSingular: $("#definite--singular").val(),
+        indefinitePlural: $("#indefinite--plural").val(),
+        definitePlural: $("#definite--plural").val(),
+        example: $("#example").val(),
+        isCustom: 1,
+      };
 
-    // Ensure no empty fields
-    if (Object.values(body).some((value) => value === "")) {
-      alert("Please fill in all fields before submitting.");
-      return;
-    }
+      // Ensure no empty fields
+      if (Object.values(body).some((value) => value === "")) {
+        alert("Please fill in all fields before submitting.");
+        return;
+      }
 
+      try {
+        const response = await fetch("/words/add-word", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          // Word added successfully, notify the user
+          alert("Word added successfully!");
+
+          // Redirect to the last page to see the newly added word
+          window.location.href = `/words?page=${result.totalPages}&limit=10`;
+        } else {
+          console.error(result.error);
+          alert("Failed to add word: " + result.error);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error adding word");
+      }
+    });
+  });
+
+  // Delete word
+  $(function () {
+    $("table").on("click", ".delete-word", async function () {
+      const wordId = $(this).data("id");
+      console.log("delete button clicked", wordId);
+
+      const confirmed = confirm("Are you sure you want to delete this word?");
+      if (!confirmed) return;
+
+      try {
+        const response = await fetch(`/words/delete-word/${wordId}`, {
+          method: "DELETE",
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          alert("Word deleted successfully!");
+          $(this).closest("tr").remove();
+        } else {
+          alert("Failed to delete word: " + result.error);
+        }
+      } catch (err) {
+        console.error(err);
+        alert("Error deleting word");
+      }
+    });
+  });
+
+  // Edit word
+  $(document).on("click", ".edit-word", function () {
+    const wordId = $(this).data("id");
+    const english = $(this).data("english");
+    const indefiniteSingular = $(this).data("indefinite-singular");
+    const definiteSingular = $(this).data("definite-singular");
+    const indefinitePlural = $(this).data("indefinite-plural");
+    const definitePlural = $(this).data("definite-plural");
+    const example = $(this).data("example");
+
+    // Fill the form with the existing data
+    $("#wordId").val(wordId);
+    $("#english").val(english);
+    $("#indefiniteSingular").val(indefiniteSingular);
+    $("#definiteSingular").val(definiteSingular);
+    $("#indefinitePlural").val(indefinitePlural);
+    $("#definitePlural").val(definitePlural);
+    $("#old-example").val(example);
+
+    // Show the modal (if not automatically triggered by data-toggle)
+    $("#editWordModal").modal("show");
+  });
+
+  // Submit the form to update the word
+  $("#editWordForm").submit(async function (e) {
+    e.preventDefault();
+
+    const wordId = $("#wordId").val();
+    const english = $("#english").val();
+    const indefiniteSingular = $("#indefiniteSingular").val();
+    const definiteSingular = $("#definiteSingular").val();
+    const indefinitePlural = $("#indefinitePlural").val();
+    const definitePlural = $("#definitePlural").val();
+    const example = $("#old-example").val();
+
+    console.log(
+      wordId,
+      english,
+      indefiniteSingular,
+      definiteSingular,
+      indefinitePlural,
+      definitePlural,
+      example
+    );
+
+    // Send updated data to the server
     try {
-      const response = await fetch("/words/add-word", {
-        method: "POST",
+      const response = await fetch(`/words/update-word/${wordId}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(body),
+        body: JSON.stringify({
+          english: english,
+          indefiniteSingular: indefiniteSingular,
+          definiteSingular: definiteSingular,
+          indefinitePlural: indefinitePlural,
+          definitePlural: definitePlural,
+          example: example,
+        }),
       });
 
       const result = await response.json();
 
       if (response.ok) {
-        // Word added successfully, notify the user
-        alert("Word added successfully!");
-
-        // Redirect to the last page to see the newly added word
-        window.location.href = `/words?page=${result.totalPages}&limit=10`;
+        alert(result.message);
+        location.reload(); // Optionally, reload the page to see the updated data
       } else {
-        console.error(result.error);
-        alert("Failed to add word: " + result.error);
+        alert("Error updating the word: " + result.error);
       }
     } catch (err) {
+      alert("Error updating the word");
       console.error(err);
-      alert("Error adding word");
     }
   });
-});
+};
 
-$(function () {
-  $("table").on("click", ".delete-word", async function () {
-    const wordId = $(this).data("id");
-    console.log("delete button clicked", wordId);
+//wordPage Nouns search functionality
+const searchNouns = function () {
+  // Search functionality for nouns
+  const searchWords = function () {
+    const searchButton = document.getElementById("searchButton");
+    const searchInput = document.getElementById("searchWord");
+    const nounsTableBody = document.getElementById("nounsTableBody");
+    const paginationDiv = document.getElementById("pagination");
+    const backButton = document.getElementById("backButton");
+    if (
+      !searchButton ||
+      !searchInput ||
+      !nounsTableBody ||
+      !paginationDiv ||
+      !backButton
+    )
+      return;
 
-    const confirmed = confirm("Are you sure you want to delete this word?");
-    if (!confirmed) return;
+    // Event listener for the search button
+    searchButton.addEventListener("click", function () {
+      const searchTerm = searchInput.value.trim();
 
-    try {
-      const response = await fetch(`/words/delete-word/${wordId}`, {
-        method: "DELETE",
-      });
+      if (searchTerm) {
+        const url = `http://localhost:8080/words/search?q=${encodeURIComponent(
+          searchTerm
+        )}`;
 
-      const result = await response.json();
+        // Fetch API to perform the search
+        fetch(url)
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error("Network response was not ok");
+            }
+            return response.json(); // Assume backend returns JSON data
+          })
+          .then((data) => {
+            console.log(data);
 
-      if (response.ok) {
-        alert("Word deleted successfully!");
-        $(this).closest("tr").remove();
-      } else {
-        alert("Failed to delete word: " + result.error);
-      }
-    } catch (err) {
-      console.error(err);
-      alert("Error deleting word");
-    }
-  });
-});
-
-// Edit word
-$(document).on("click", ".edit-word", function () {
-  const wordId = $(this).data("id");
-  const english = $(this).data("english");
-  const indefiniteSingular = $(this).data("indefinite-singular");
-  const definiteSingular = $(this).data("definite-singular");
-  const indefinitePlural = $(this).data("indefinite-plural");
-  const definitePlural = $(this).data("definite-plural");
-  const example = $(this).data("example");
-
-  // Fill the form with the existing data
-  $("#wordId").val(wordId);
-  $("#english").val(english);
-  $("#indefiniteSingular").val(indefiniteSingular);
-  $("#definiteSingular").val(definiteSingular);
-  $("#indefinitePlural").val(indefinitePlural);
-  $("#definitePlural").val(definitePlural);
-  $("#old-example").val(example);
-
-  // Show the modal (if not automatically triggered by data-toggle)
-  $("#editWordModal").modal("show");
-});
-
-// Submit the form to update the word
-$("#editWordForm").submit(async function (e) {
-  e.preventDefault();
-
-  const wordId = $("#wordId").val();
-  const english = $("#english").val();
-  const indefiniteSingular = $("#indefiniteSingular").val();
-  const definiteSingular = $("#definiteSingular").val();
-  const indefinitePlural = $("#indefinitePlural").val();
-  const definitePlural = $("#definitePlural").val();
-  const example = $("#old-example").val();
-
-  console.log(
-    wordId,
-    english,
-    indefiniteSingular,
-    definiteSingular,
-    indefinitePlural,
-    definitePlural,
-    example
-  );
-
-  // Send updated data to the server
-  try {
-    const response = await fetch(`/words/update-word/${wordId}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        english: english,
-        indefiniteSingular: indefiniteSingular,
-        definiteSingular: definiteSingular,
-        indefinitePlural: indefinitePlural,
-        definitePlural: definitePlural,
-        example: example,
-      }),
-    });
-
-    const result = await response.json();
-
-    if (response.ok) {
-      alert(result.message);
-      location.reload(); // Optionally, reload the page to see the updated data
-    } else {
-      alert("Error updating the word: " + result.error);
-    }
-  } catch (err) {
-    alert("Error updating the word");
-    console.error(err);
-  }
-});
-
-const searchWords = function () {
-  const searchButton = document.getElementById("searchButton");
-  const searchInput = document.getElementById("searchWord");
-  const nounsTableBody = document.getElementById("nounsTableBody");
-  const paginationDiv = document.getElementById("pagination");
-  const backButton = document.getElementById("backButton");
-  if (
-    !searchButton ||
-    !searchInput ||
-    !nounsTableBody ||
-    !paginationDiv ||
-    !backButton
-  )
-    return;
-
-  searchButton.addEventListener("click", function () {
-    const searchTerm = searchInput.value.trim();
-
-    if (searchTerm) {
-      const url = `http://localhost:8080/words/search?q=${encodeURIComponent(
-        searchTerm
-      )}`;
-
-      // Fetch API to perform the search
-      fetch(url)
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error("Network response was not ok");
-          }
-          return response.json(); // Assume backend returns JSON data
-        })
-        .then((data) => {
-          console.log(data);
-          if (data.found === false) {
             // If no results found, show alert box
-            showAlert("No results found for your search.");
-          }
+            if (data.found === false) {
+              showAlert("No results found for your search.");
+            }
 
-          if (data.words.length > 0) {
-            nounsTableBody.innerHTML = "";
+            // If results found
+            if (data.words.length > 0) {
+              nounsTableBody.innerHTML = "";
 
-            // Populate the table with search results
-            data.words.forEach((word) => {
-              const row = document.createElement("tr");
-              row.innerHTML = `
+              // Populate the table with search results
+              data.words.forEach((word) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `
                 <td  class="wordPage--nouns--table--word">${word.english}</td>
                 <td  class="wordPage--nouns--table--word">${
                   word.indefiniteSingular
@@ -692,11 +701,11 @@ const searchWords = function () {
                   }
                 </td>
               `;
-              nounsTableBody.appendChild(row);
-            });
+                nounsTableBody.appendChild(row);
+              });
 
-            // Update pagination information
-            paginationDiv.innerHTML = `
+              // Update pagination information
+              paginationDiv.innerHTML = `
               ${
                 data.currentPage > 1
                   ? `<a href="?page=${data.currentPage - 1}&limit=${
@@ -714,34 +723,47 @@ const searchWords = function () {
               <span>Page ${data.currentPage} of ${data.totalPages}</span>
             `;
 
-            // Show the "Back" button
-            backButton.style.display = "block";
-          }
-        })
-        .catch((error) => {
-          console.error("Error fetching words:", error);
-        });
-    }
-  });
+              // Show the "Back" button
+              backButton.style.display = "block";
+            }
+          })
+          .catch((error) => {
+            console.error("Error fetching words:", error);
+          });
+      }
+    });
 
-  // Back button functionality: reloads the original page (all words)
-  backButton.addEventListener("click", function () {
-    const url = new URL(window.location.href);
-    // Simply reload the page to get the full list of words
-    window.location.href = url;
-    // Hide the "Back" button
-    backButton.style.display = "none";
-  });
+    // Back button functionality: reloads the original page (all words)
+    backButton.addEventListener("click", function () {
+      const url = new URL(window.location.href);
+      // Simply reload the page to get the full list of words
+      window.location.href = url;
+      // Hide the "Back" button
+      backButton.style.display = "none";
+    });
+  };
+
+  function showAlert(message) {
+    const alertBox = document.getElementById("alertBox");
+    if (!alertBox) return;
+    alertBox.innerHTML = message;
+    alertBox.style.display = "block";
+    setTimeout(() => {
+      alertBox.style.display = "none";
+    }, 3000); // 3000 milliseconds = 3 seconds
+  }
+
+  searchWords();
 };
 
-function showAlert(message) {
-  const alertBox = document.getElementById("alertBox");
-  if (!alertBox) return;
-  alertBox.innerHTML = message;
-  alertBox.style.display = "block";
-  setTimeout(() => {
-    alertBox.style.display = "none";
-  }, 3000); // 3000 milliseconds = 3 seconds
-}
+//initialize the functions
+const init = function () {
+  userManagementSystem();
+  homeSection1Refresh();
+  slider();
+  navLogout();
+  wordPageNounsModifyTable();
+  searchNouns();
+};
 
-searchWords();
+init();
