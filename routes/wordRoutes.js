@@ -11,6 +11,24 @@ const db = new sqlite3.Database("vocabulary.sqlite3.db", (err) => {
   }
 });
 
+// Utility function to handle errors
+const handleError = (res, err) => {
+  console.error(err.message);
+  return res.status(500).json({ error: err.message });
+};
+
+// Utility function to get total item count
+const getTotalItemCount = (callback) => {
+  const countQuery = `SELECT COUNT(*) AS count FROM Wordpage__nouns`;
+  db.get(countQuery, [], (countErr, countRow) => {
+    if (countErr) {
+      callback(countErr, null);
+    } else {
+      callback(null, countRow.count);
+    }
+  });
+};
+
 // Retrieve words, pagination
 router.get("/", (req, res) => {
   const page = parseInt(req.query.page, 10) || 1; //default page 1
@@ -25,18 +43,12 @@ router.get("/", (req, res) => {
       LIMIT ? OFFSET ?`;
 
   db.all(query, [limit, offset], (err, rows) => {
-    if (err) {
-      return console.error(err.message);
-    }
+    if (err) return handleError(res, err);
 
-    //total number of items
-    const countQuery = `SELECT COUNT(*) AS count FROM Wordpage__nouns`;
-    db.get(countQuery, [], (countErr, countRow) => {
-      if (countErr) {
-        return console.error(countErr.message);
-      }
+    // Retrieve total number of items
+    getTotalItemCount((countErr, totalItems) => {
+      if (countErr) return handleError(res, countErr);
 
-      const totalItems = countRow.count;
       const totalPages = Math.ceil(totalItems / limit);
       res.render("wordpage", {
         words: rows,
@@ -75,20 +87,13 @@ router.post("/add-word", (req, res) => {
       example,
     ],
     function (err) {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
+      if (err) return handleError(res, err);
 
       // Retrieve the total count of words after addition
-      const countQuery = `SELECT COUNT(*) AS count FROM Wordpage__nouns`;
-      db.get(countQuery, [], (countErr, countRow) => {
-        if (countErr) {
-          return res.status(500).json({ error: countErr.message });
-        }
+      getTotalItemCount((countErr, totalItems) => {
+        if (countErr) return handleError(res, countErr);
 
-        const totalItems = countRow.count;
-        const totalPages = Math.ceil(totalItems / 10); //10items per page
-
+        const totalPages = Math.ceil(totalItems / 10); // 10 items per page
         res.json({
           message: "Word added successfully",
           id: this.lastID,
@@ -102,13 +107,10 @@ router.post("/add-word", (req, res) => {
 // Delete a word
 router.delete("/delete-word/:id", (req, res) => {
   const wordId = req.params.id;
-
   const query = `DELETE FROM Wordpage__nouns WHERE id = ? AND is_custom = 1`;
 
   db.run(query, [wordId], function (err) {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
+    if (err) return handleError(res, err);
     res.json({ message: "Word deleted successfully" });
   });
 });
@@ -145,9 +147,7 @@ router.put("/update-word/:id", (req, res) => {
       wordId,
     ],
     function (err) {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
+      if (err) return handleError(res, err);
       res.json({ message: "Word updated successfully" });
     }
   );
@@ -184,9 +184,7 @@ router.get("/search", (req, res) => {
       offset,
     ],
     (err, rows) => {
-      if (err) {
-        return res.status(500).json({ error: err.message });
-      }
+      if (err) return handleError(res, err);
 
       if (rows.length === 0) {
         return res.json({ found: false, message: "No results found." });
@@ -194,26 +192,24 @@ router.get("/search", (req, res) => {
 
       // Count query for pagination
       const countQuery = `
-          SELECT COUNT(*) AS count FROM Wordpage__nouns
-          WHERE english LIKE ? 
-          OR indefinite_singular LIKE ?
-          OR definite_singular LIKE ?
-          OR indefinite_plural LIKE ?
-          OR definite_plural LIKE ?`;
+            SELECT COUNT(*) AS count FROM Wordpage__nouns
+            WHERE english LIKE ? 
+            OR indefinite_singular LIKE ?
+            OR definite_singular LIKE ?
+            OR indefinite_plural LIKE ?
+            OR definite_plural LIKE ?`;
 
       db.get(
         countQuery,
         [
-          `%${searchTerm}%`, // for english
-          `%${searchTerm}%`, // for indefinite_singular
-          `%${searchTerm}%`, // for definite_singular
-          `%${searchTerm}%`, // for indefinite_plural
-          `%${searchTerm}%`, // for definite_plural
+          `%${searchTerm}%`,
+          `%${searchTerm}%`,
+          `%${searchTerm}%`,
+          `%${searchTerm}%`,
+          `%${searchTerm}%`,
         ],
         (countErr, countRow) => {
-          if (countErr) {
-            return res.status(500).json({ error: countErr.message });
-          }
+          if (countErr) return handleError(res, countErr);
 
           const totalItems = countRow.count;
           const totalPages = Math.ceil(totalItems / limit);
