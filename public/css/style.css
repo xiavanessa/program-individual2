@@ -26,6 +26,7 @@ body {
 /* Navigation */
 .web-nav {
   background-color: var(--color-primary);
+  margin-bottom: 0px;
 }
 
 .web-nav .navbar-nav > .active > a {
@@ -54,7 +55,8 @@ body {
   padding: 4px 6px;
 }
 
-#logoutButton {
+#logoutButton,
+#loginButton {
   padding: 15px 10px;
 }
 
@@ -63,9 +65,12 @@ body {
   background-color: var(--color-primary);
 }
 
+.section--0 {
+  background-color: #667bc6;
+}
+
 .header__title {
   /* display: flex; */
-  background-color: #667bc6;
   align-items: center;
   justify-content: center;
   gap: 8rem;
@@ -75,7 +80,7 @@ body {
 .header__title__text {
   color: var(--color-quaternary);
   font-weight: 800;
-  font-size: 70px;
+  font-size: 50px;
 }
 
 .header__title__img {
@@ -109,7 +114,20 @@ body {
 }
 
 .section--1__btn {
-  margin-bottom: 5px;
+  color: #090909;
+  padding: 0.5em 1em;
+  font-size: 14px;
+  border-radius: 0.5em;
+  background: #e8e8e8;
+  cursor: pointer;
+  border: 1px solid #e8e8e8;
+  transition: all 0.3s;
+  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+}
+
+.section--1__btn {
+  color: #666;
+  box-shadow: inset 4px 4px 12px #c5c5c5, inset -4px -4px 12px #ffffff;
 }
 
 .feature-box {
@@ -516,6 +534,10 @@ body {
   .table > thead > tr > .wordPage--nouns--table--word,
   .table > tbody > tr > .wordPage--nouns--table--word {
     padding: 8px;
+  }
+
+  .header__title__text {
+    font-size: 70px;
   }
 }
 

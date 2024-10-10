@@ -264,6 +264,14 @@ const navLogout = () => {
   });
 };
 
+const navLogin = () => {
+  const loginBtn = document.querySelector("#loginButton");
+  if (!loginBtn) return;
+  loginBtn.addEventListener("click", function () {
+    window.location.href = "/";
+  });
+};
+
 //home page
 //Section1 refresh btn
 const homeSection1Refresh = function () {
@@ -762,6 +770,7 @@ const init = function () {
   homeSection1Refresh();
   slider();
   navLogout();
+  navLogin();
   wordPageNounsModifyTable();
   searchNouns();
 };

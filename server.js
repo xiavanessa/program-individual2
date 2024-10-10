@@ -7,15 +7,19 @@ const app = express();
 const port = 8080;
 
 // Register Handlebars helpers
-const hbs = engine({
-  helpers: {
-    add: (a, b) => a + b,
-    subtract: (a, b) => a - b,
-    greaterThan: (a, b) => a > b,
-    lessThan: (a, b) => a < b,
-    equal: (a, b) => a === b,
-  },
-});
+app.engine(
+  "handlebars",
+  engine({
+    helpers: {
+      add: (a, b) => a + b,
+      subtract: (a, b) => a - b,
+      greaterThan: (a, b) => a > b,
+      lessThan: (a, b) => a < b,
+      equal: (a, b) => a === b,
+    },
+    partialsDir: path.join(__dirname, "views/partials"), // Specify the partials directory
+  })
+);
 
 // Middleware
 app.use(express.json());
@@ -35,7 +39,6 @@ app.use(
 );
 
 // set up handlebars as the view engine
-app.engine("handlebars", hbs);
 app.set("view engine", "handlebars");
 app.set("views", path.join(__dirname, "views"));
 
@@ -48,6 +51,7 @@ const wordRoutes = require(path.join(__dirname, "routes/wordRoutes"));
 app.use("/words", wordRoutes);
 //homeSection1 routes
 const homeSection1 = require(path.join(__dirname, "routes/homeSection1Routes"));
+
 app.use("/home", homeSection1);
 
 // Routes

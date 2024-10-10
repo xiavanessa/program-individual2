@@ -1,0 +1,43 @@
+<header class="header">
+  <nav class="navbar navbar-default web-nav" role="navigation">
+    <div class="container-fluid">
+      <ul class="nav__links nav navbar-nav">
+        <li>
+          <img src="/img/avatar.jpg" alt="avatar" class="nav__avatar" />
+        </li>
+        <li class="active">
+          <a href="/home">Hem</a>
+        </li>
+        <li>
+          <a class="dropdown-toggle" data-toggle="dropdown">Ordförråd
+            <b class="caret"></b>
+          </a>
+          <ul class="dropdown-menu">
+            <li><a href="/words">Nouns (Substantiv)</a></li>
+            <li><a href="#">Verbs (Verb)</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Adjectives (Adjektiv)</a></li>
+            <li class="divider"></li>
+            <li><a href="#">Pronouns (Pronomen)</a></li>
+            <li><a href="#">Adverbs (Adverb)</a></li>
+            <li><a href="#">Prepositions (Prepositioner)</a></li>
+            <li>
+              <a href="#">Numbers (Nummer) & Week (Vecka) & Month (Månad)</a>
+            </li>
+            <li><a href="#">Common Phrases (Vanliga Fraser)</a></li>
+          </ul>
+        </li>
+        <li><a href="#">Läsning</a></li>
+        <li><a href="/about">About</a></li>
+        <li><a href="/contact">Contact</a></li>
+        <li>
+          {{#if isLoggedIn}}
+            <button id="logoutButton" class="btn btn-danger btn-sm">LOG OUT</button>
+          {{else}}
+            <button id="loginButton" class="btn btn-success btn-sm">LOG IN</button>
+          {{/if}}
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>
