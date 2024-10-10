@@ -56,7 +56,7 @@ app.use("/", homeSection1);
 
 // Routes
 app.get("/login", function (req, res) {
-  res.sendFile(path.join(__dirname, "index.html"));
+  res.sendFile(path.join(__dirname, "login.html"));
 });
 
 app.get("/about", (req, res) => {
