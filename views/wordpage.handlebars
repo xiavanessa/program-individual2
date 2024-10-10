@@ -5,15 +5,17 @@
   </div>
 
   <!-- Button trigger modal -->
-  <div class="text-right wordPage--nouns--add">
-    <button
-      class="btn btn-xs btn-primary btn-responsive"
-      data-toggle="modal"
-      data-target="#myModal"
-    >
-      add
-    </button>
-  </div>
+  {{#if isLoggedIn}}
+    <div class="text-right wordPage--nouns--add">
+      <button
+        class="btn btn-xs btn-primary btn-responsive"
+        data-toggle="modal"
+        data-target="#myModal"
+      >
+        add
+      </button>
+    </div>
+  {{/if}}
 
   <!-- Modal -->
   <div
@@ -165,7 +167,9 @@
           <th class="wordPage--nouns--table--head">Indefinite Plural</th>
           <th class="wordPage--nouns--table--head">Definite Plural</th>
           <th class="wordPage--nouns--table--head">Example</th>
-          <th class="wordPage--nouns--table--head">Actions</th>
+          {{#if isLoggedIn}}
+            <th class="wordPage--nouns--table--head">Actions</th>
+          {{/if}}
         </tr>
       </thead>
       <tbody id="nounsTableBody">

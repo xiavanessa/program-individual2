@@ -55,9 +55,10 @@ router.get("/", (req, res) => {
         currentPage: page,
         totalPages: totalPages,
         limit: limit,
-        layout: "main", // 使用 main.handlebars 作为布局
-        title: "Home", // 设置页面标题
+        layout: "main",
+        title: "Home",
         isLoggedIn: !!req.session.user,
+        activePage: "words",
       });
     });
   });
@@ -222,6 +223,7 @@ router.get("/search", (req, res) => {
             currentPage: page,
             totalPages: totalPages,
             limit: limit,
+            isLoggedIn: req.session.user ? true : false,
           });
         }
       );

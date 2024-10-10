@@ -21,6 +21,7 @@ html {
 body {
   font-size: 1.6rem;
   font-family: "Inter", sans-serif;
+  background-color: var(--color-primary);
 }
 
 /* Navigation */
@@ -384,6 +385,7 @@ body {
 }
 
 /* about */
+
 .aboutPage-header,
 .contactPage-header,
 .aboutPage-header-tertiary {
@@ -462,7 +464,7 @@ body {
 }
 
 .contactPage-header {
-  margin-top: 35px;
+  margin-top: 10%;
 }
 
 .contactPage-body {

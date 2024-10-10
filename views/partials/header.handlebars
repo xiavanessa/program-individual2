@@ -5,15 +5,15 @@
         <li>
           <img src="/img/avatar.jpg" alt="avatar" class="nav__avatar" />
         </li>
-        <li class="active">
-          <a href="/home">Hem</a>
+        <li class="{{#if (equal activePage 'home')}}active{{/if}}">
+          <a href="/">Hem</a>
         </li>
-        <li>
+        <li class="{{#if (equal activePage 'words')}}active{{/if}}">
           <a class="dropdown-toggle" data-toggle="dropdown">Ordförråd
             <b class="caret"></b>
           </a>
           <ul class="dropdown-menu">
-            <li><a href="/words">Nouns (Substantiv)</a></li>
+            <li ><a href="/word">Nouns (Substantiv)</a></li>
             <li><a href="#">Verbs (Verb)</a></li>
             <li class="divider"></li>
             <li><a href="#">Adjectives (Adjektiv)</a></li>
@@ -27,9 +27,9 @@
             <li><a href="#">Common Phrases (Vanliga Fraser)</a></li>
           </ul>
         </li>
-        <li><a href="#">Läsning</a></li>
-        <li><a href="/about">About</a></li>
-        <li><a href="/contact">Contact</a></li>
+        <li class="{{#if (equal activePage 'reading')}}active{{/if}}"><a href="/reading">Läsning</a></li>
+        <li class="{{#if (equal activePage 'about')}}active{{/if}}"><a href="/about">About</a></li>
+        <li class="{{#if (equal activePage 'contact')}}active{{/if}}"><a href="/contact">Contact</a></li>
         <li>
           {{#if isLoggedIn}}
             <button id="logoutButton" class="btn btn-danger btn-sm">LOG OUT</button>

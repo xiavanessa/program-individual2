@@ -91,6 +91,7 @@ router.get("/", (req, res) => {
         layout: "main", // 使用 main.handlebars 作为布局
         title: "Home", // 设置页面标题
         isLoggedIn: !!req.session.user,
+        activePage: "home",
       });
     });
   });

@@ -96,7 +96,7 @@ function userManagementSystem() {
   //jump to website
   function jumpToWebsite(duration = 3000) {
     setTimeout(() => {
-      window.location.href = "/home";
+      window.location.href = "/";
     }, duration);
   }
 
@@ -252,8 +252,7 @@ const navLogout = () => {
       });
 
       if (response.ok) {
-        // Logout was successful, redirect to the login page
-        window.location.href = "/";
+        window.location.reload();
       } else {
         alert("Logout failed. Please try again.");
       }
@@ -268,7 +267,7 @@ const navLogin = () => {
   const loginBtn = document.querySelector("#loginButton");
   if (!loginBtn) return;
   loginBtn.addEventListener("click", function () {
-    window.location.href = "/";
+    window.location.href = "/login";
   });
 };
 
@@ -284,7 +283,7 @@ const homeSection1Refresh = function () {
     console.log("Refreshing page with URL:", url);
 
     // fetch the data
-    fetch(`http://localhost:8080/home${url}`)
+    fetch(`${url}`)
       .then((response) => {
         console.log(response);
         if (!response.ok) {
@@ -502,7 +501,7 @@ const wordPageNounsModifyTable = function () {
       }
 
       try {
-        const response = await fetch("/words/add-word", {
+        const response = await fetch("/word/add-word", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -517,7 +516,7 @@ const wordPageNounsModifyTable = function () {
           alert("Word added successfully!");
 
           // Redirect to the last page to see the newly added word
-          window.location.href = `/words?page=${result.totalPages}&limit=10`;
+          window.location.href = `/word?page=${result.totalPages}&limit=10`;
         } else {
           console.error(result.error);
           alert("Failed to add word: " + result.error);
@@ -539,7 +538,7 @@ const wordPageNounsModifyTable = function () {
       if (!confirmed) return;
 
       try {
-        const response = await fetch(`/words/delete-word/${wordId}`, {
+        const response = await fetch(`/word/delete-word/${wordId}`, {
           method: "DELETE",
         });
 
@@ -605,7 +604,7 @@ const wordPageNounsModifyTable = function () {
 
     // Send updated data to the server
     try {
-      const response = await fetch(`/words/update-word/${wordId}`, {
+      const response = await fetch(`/word/update-word/${wordId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -658,7 +657,7 @@ const searchNouns = function () {
       const searchTerm = searchInput.value.trim();
 
       if (searchTerm) {
-        const url = `http://localhost:8080/words/search?q=${encodeURIComponent(
+        const url = `http://localhost:8080/word/search?q=${encodeURIComponent(
           searchTerm
         )}`;
 
@@ -701,8 +700,9 @@ const searchNouns = function () {
                 }</td>
                 <td  class="wordPage--nouns--table--word">${word.example}</td>
                 <td>
+
                   ${
-                    word.is_custom
+                    word.is_custom && data.isLoggedIn
                       ? `<button class="btn btn-primary btn-xs edit-word" data-id="${word.id}">Edit</button>
                   <button class="btn btn-danger btn-xs delete-word" data-id="${word.id}">Delete</button>`
                       : ""

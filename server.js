@@ -48,23 +48,42 @@ const userRoutes = require(path.join(__dirname, "routes/userRoutes"));
 app.use("/users", userRoutes);
 //word manangement system routes
 const wordRoutes = require(path.join(__dirname, "routes/wordRoutes"));
-app.use("/words", wordRoutes);
+app.use("/word", wordRoutes);
 //homeSection1 routes
 const homeSection1 = require(path.join(__dirname, "routes/homeSection1Routes"));
 
-app.use("/home", homeSection1);
+app.use("/", homeSection1);
 
 // Routes
-app.get("/", function (req, res) {
+app.get("/login", function (req, res) {
   res.sendFile(path.join(__dirname, "index.html"));
 });
 
 app.get("/about", (req, res) => {
-  res.sendFile(path.join(__dirname, "about.html"));
+  res.render("about", {
+    layout: "main",
+    title: "About Us",
+    isLoggedIn: !!req.session.user,
+    activePage: "about",
+  });
 });
 
-app.get("/contact", function (req, res) {
-  res.sendFile(path.join(__dirname, "contact.html"));
+app.get("/contact", (req, res) => {
+  res.render("contact", {
+    layout: "main",
+    title: "Contact Us",
+    isLoggedIn: !!req.session.user,
+    activePage: "contact",
+  });
+});
+
+app.get("/reading", (req, res) => {
+  res.render("reading", {
+    layout: "main",
+    title: "reading",
+    isLoggedIn: !!req.session.user,
+    activePage: "reading",
+  });
 });
 
 // listen on port
