@@ -1,6 +1,6 @@
 <header class="header">
   <nav class="navbar navbar-default web-nav" role="navigation">
-    <div class="container-fluid">
+    <div class="container-fluid web-nav__container">
       <ul class="nav__links nav navbar-nav">
         <li>
           <img src="/img/avatar.jpg" alt="avatar" class="nav__avatar" />
@@ -31,6 +31,9 @@
         <li class="{{#if (equal activePage 'about')}}active{{/if}}"><a href="/about">About</a></li>
         <li class="{{#if (equal activePage 'contact')}}active{{/if}}"><a href="/contact">Contact</a></li>
         <li>
+        </ul>
+        
+        <ul class="nav navbar-right nav__login">
           {{#if isLoggedIn}}
             <button id="logoutButton" class="btn btn-danger btn-sm">LOG OUT</button>
           {{else}}

@@ -42,6 +42,11 @@ body {
   color: #fdffd2;
 }
 
+.web-nav__container {
+  padding: 0;
+  padding-right: 5px;
+}
+
 .nav__avatar {
   width: 45px;
   height: 45px;
@@ -58,7 +63,9 @@ body {
 
 #logoutButton,
 #loginButton {
-  padding: 15px 10px;
+  margin-right: 12px;
+  margin-top: 10px;
+  padding: 8px 6px;
 }
 
 /* header */
@@ -123,7 +130,10 @@ body {
   cursor: pointer;
   border: 1px solid #e8e8e8;
   transition: all 0.3s;
-  box-shadow: 6px 6px 12px #c5c5c5, -6px -6px 12px #ffffff;
+  position: absolute;
+  top: 80%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .section--1__btn {
@@ -132,6 +142,7 @@ body {
 }
 
 .feature-box {
+  position: relative;
   height: 300px;
   box-shadow: 0 2.4rem 4.8rem rgba(200, 200, 150, 0.4);
   border-radius: 11px;
@@ -375,7 +386,7 @@ body {
 }
 
 .feature-box {
-  border-radius: 3px;
+  border-radius: 15px;
   box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.15);
   transition: transform 0.3s;
 }
