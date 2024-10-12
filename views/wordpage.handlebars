@@ -5,7 +5,7 @@
   </div>
 
   <!-- Button trigger modal -->
-  {{#if isLoggedIn}}
+  {{#if isAdmin}}
     <div class="text-right wordPage--nouns--add">
       <button
         class="btn btn-xs btn-primary btn-responsive"
@@ -167,7 +167,7 @@
           <th class="wordPage--nouns--table--head">Indefinite Plural</th>
           <th class="wordPage--nouns--table--head">Definite Plural</th>
           <th class="wordPage--nouns--table--head">Example</th>
-          {{#if isLoggedIn}}
+          {{#if isAdmin}}
             <th class="wordPage--nouns--table--head">Actions</th>
           {{/if}}
         </tr>
@@ -191,7 +191,7 @@
             <td class="wordPage--nouns--table--word">{{this.example}}</td>
             <td class="wordPage--nouns--table--word">
               {{#if this.is_custom}}
-                 {{#if ../isLoggedIn}}
+                 {{#if ../isAdmin}}
                   <button
                     class="btn btn-primary btn-xs edit-word"
                     data-id="{{this.id}}"

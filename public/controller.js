@@ -702,7 +702,7 @@ const searchNouns = function () {
                 <td>
 
                   ${
-                    word.is_custom && data.isLoggedIn
+                    word.is_custom && data.isAdmin
                       ? `<button class="btn btn-primary btn-xs edit-word" data-id="${word.id}">Edit</button>
                   <button class="btn btn-danger btn-xs delete-word" data-id="${word.id}">Delete</button>`
                       : ""

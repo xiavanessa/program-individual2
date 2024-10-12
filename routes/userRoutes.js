@@ -2,6 +2,8 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
 const sqlite3 = require("sqlite3").verbose();
+const dotenv = require("dotenv");
+dotenv.config();
 
 // User database
 const userDb = new sqlite3.Database("users.sqlite3.db", (err) => {
@@ -46,10 +48,24 @@ router.post("/login", async (req, res) => {
       console.error(err);
       return res.status(500).json({ error: "Error logging in." });
     }
-
     if (user && (await bcrypt.compare(password, user.password))) {
-      req.session.user = { username: user.username };
-      res.json({ message: "Login successful.", username: user.username });
+      // Check if the user is an admin
+      let isAdmin = false;
+      if (
+        username === process.env.ADMIN_USERNAME &&
+        password === process.env.ADMIN_PASSWORD
+      ) {
+        isAdmin = true;
+      }
+
+      // Store user information in session
+      req.session.user = { username: user.username, isAdmin: isAdmin };
+
+      res.json({
+        message: "Login successful.",
+        username: user.username,
+        isAdmin: isAdmin,
+      });
     } else {
       res.status(401).json({ error: "Invalid username or password." });
     }

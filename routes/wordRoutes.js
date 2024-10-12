@@ -58,6 +58,7 @@ router.get("/", (req, res) => {
         layout: "main",
         title: "Home",
         isLoggedIn: !!req.session.user,
+        isAdmin: req.session.user && req.session.user.isAdmin,
         activePage: "words",
       });
     });
