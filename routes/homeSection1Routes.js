@@ -20,6 +20,7 @@ function getTotalItems(callback) {
   });
 }
 
+// get all words
 router.get("/words", (req, res) => {
   const page = parseInt(req.query.page) || 1; //default page 1
   const limit = 6; //6 words per page

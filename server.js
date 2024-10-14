@@ -1,3 +1,4 @@
+// (ChatGPT, 2024, http://chatgpt.com) Debugging and used small parts)
 const express = require("express");
 const { engine } = require("express-handlebars");
 const path = require("path");
@@ -51,13 +52,9 @@ const wordRoutes = require(path.join(__dirname, "routes/wordRoutes"));
 app.use("/word", wordRoutes);
 //homeSection1 routes
 const homeSection1 = require(path.join(__dirname, "routes/homeSection1Routes"));
-
 app.use("/", homeSection1);
 
 // Routes
-app.get("/login", function (req, res) {
-  res.sendFile(path.join(__dirname, "login.html"));
-});
 
 app.get("/about", (req, res) => {
   res.render("about", {

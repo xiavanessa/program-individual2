@@ -1,16 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/bootstrap.css" />
-    <link rel="stylesheet" href="/css/style.css" />
-    <title>Log In</title>
-    <script src="/jquery-3.7.1.js" defer></script>
-    <script src="/bootstrap.min.js" defer></script>
-    <script src="/controller.js" defer></script>
-  </head>
-  <body class="index">
+ <main class="index">
     <div class="index--container container">
       <header class="index--header">
         <h1><b>Welcome to Vanessa's personal website</b></h1>
@@ -31,8 +19,10 @@
         <!-- <button class="btn btn-danger  btn-sm" id="logout-btn"><b>Log Out </b></button> -->
       </div>
       <div class="h4"><b>Current user: </b><span id="current-user"></span></div>
-      <div class="h4"><b>users:</b>  <span id="all-users"></span></div>
+       {{!-- {{#if error}}
+        <div class="h4 text-danger"><b>Error: {{error}}</b></div>
+      {{/if}} --}}
+      <div id="all-users" class="h4"><b>Users: {{#each users}}{{this}},{{/each}}</b></div>
     </div>
     <div id="notification"></div>
-  </body>
-</html>
+ </main>

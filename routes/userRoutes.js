@@ -1,3 +1,6 @@
+// (ChatGPT, 2024, http://chatgpt.com) Debugging and used small parts)
+// (Bootstrap, 2024, http://getbootstrap.com) Inspiration and templates
+
 const express = require("express");
 const bcrypt = require("bcrypt");
 const router = express.Router();
@@ -39,6 +42,7 @@ router.post("/register", async (req, res) => {
 
 // Login user
 router.post("/login", async (req, res) => {
+  console.log("recieved login request");
   const { username, password } = req.body;
 
   const query = `SELECT * FROM Users WHERE username = ?`;
@@ -66,6 +70,7 @@ router.post("/login", async (req, res) => {
         username: user.username,
         isAdmin: isAdmin,
       });
+      console.log(req.session.user);
     } else {
       res.status(401).json({ error: "Invalid username or password." });
     }
@@ -100,20 +105,25 @@ router.post("/logout", (req, res) => {
 });
 
 // Retrieve all users
-router.get("/users", (req, res) => {
+router.get("/", (req, res) => {
+  console.log("GET /users");
   const query = `SELECT username FROM Users`;
 
   userDb.all(query, [], (err, rows) => {
     if (err) {
       console.error(err);
-      return res.status(500).send("Error retrieving users.");
+      return res
+        .status(500)
+        .render("logIn", { error: "Error fetching users." });
     }
-    res.json({ users: rows.map((row) => row.username) });
+
+    const users = rows.map((row) => row.username);
+    res.render("logIn", { users: users });
   });
 });
 
 // Update user
-router.put("/users/:username", async (req, res) => {
+router.put("/:username", async (req, res) => {
   const { username } = req.params;
   const { password, newUsername, newPassword } = req.body;
 
@@ -173,7 +183,7 @@ router.put("/users/:username", async (req, res) => {
 });
 
 // Delete user
-router.delete("/users/:username", (req, res) => {
+router.delete("/:username", (req, res) => {
   const { username } = req.params;
   const { password } = req.body;
 

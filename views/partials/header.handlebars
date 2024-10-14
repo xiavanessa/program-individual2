@@ -1,3 +1,4 @@
+{{!-- (Bootstrap, 2024, http://getbootstrap.com) Inspiration and templates  --}}
 <header class="header">
   <nav class="navbar navbar-default web-nav" role="navigation">
     <div class="container-fluid web-nav__container">
@@ -34,11 +35,12 @@
         </ul>
         
         <ul class="nav navbar-right nav__login">
-          {{#if isLoggedIn}}
-            <button id="logoutButton" class="btn btn-danger btn-sm">LOG OUT</button>
-          {{else}}
-            <button id="loginButton" class="btn btn-success btn-sm">LOG IN</button>
-          {{/if}}
+          <li>
+            {{#if isLoggedIn}}
+              <button id="logoutButton" class="btn btn-danger btn-sm {{#if (equal activePage 'reading')}}active{{/if}}">LOG OUT</button>
+            {{else}}
+              <button id="loginButton" class="btn btn-success btn-sm {{#if (equal activePage 'reading')}}active{{/if}}" data-href="/login" >LOG IN</button>
+            {{/if}}
         </li>
       </ul>
     </div>

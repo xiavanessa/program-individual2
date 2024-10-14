@@ -1,3 +1,6 @@
+// (ChatGPT, 2024, http://chatgpt.com) Debugging and used small parts)
+// ////////////////////////////////////////////////
+
 "strict mode";
 //user management system
 function userManagementSystem() {
@@ -7,7 +10,6 @@ function userManagementSystem() {
   const updateBtn = document.getElementById("update-btn");
   const deleteBtn = document.getElementById("delete-btn");
   const notification = document.getElementById("notification");
-  const allUsers = document.getElementById("all-users");
   const currentUser = document.getElementById("current-user");
   const colorTertiary = getComputedStyle(
     document.documentElement
@@ -20,7 +22,6 @@ function userManagementSystem() {
     !updateBtn ||
     !deleteBtn ||
     !notification ||
-    !allUsers ||
     !currentUser
   )
     return;
@@ -103,7 +104,7 @@ function userManagementSystem() {
   // Fetch data from server
   async function fetchData(url, body = null, method = "POST") {
     try {
-      const response = await fetch(`http://localhost:8080/users/${url}`, {
+      const response = await fetch(`/users${url}`, {
         method,
         headers: {
           "Content-Type": "application/json;charset=UTF-8",
@@ -123,17 +124,6 @@ function userManagementSystem() {
         "red"
       );
       throw error;
-    }
-  }
-
-  //fetch all users
-  async function fetchUsers() {
-    try {
-      const data = await fetchData("/users", null, "GET");
-      allUsers.innerHTML = data.users.join(", ");
-      allUsers.style.color = colorTertiary;
-    } catch (error) {
-      allUsers.innerText = "Error fetching users.";
     }
   }
 
@@ -173,7 +163,7 @@ function userManagementSystem() {
       displayNotification(data.message || "Registration successful!");
       clearInputFields();
       clearCurrentUser();
-      fetchUsers();
+      window.location.href = "/users";
     } catch (error) {
       displayNotification(
         "Registration failed: " + (error.message || "Unknown error"),
@@ -198,12 +188,12 @@ function userManagementSystem() {
 
     try {
       const body = { password, newUsername, newPassword };
-      const data = await fetchData(`/users/${currentUsername}`, body, "PUT");
+      const data = await fetchData(`/${currentUsername}`, body, "PUT");
 
       displayNotification(data.message || "User updated successfully!");
       clearInputFields();
       clearCurrentUser();
-      fetchUsers();
+      window.location.href = "/users";
     } catch (error) {
       displayNotification(
         "Update failed: " + (error.message || "Unknown error"),
@@ -221,11 +211,11 @@ function userManagementSystem() {
 
     try {
       const body = { password };
-      const data = await fetchData(`/users/${currentUsername}`, body, "DELETE");
+      const data = await fetchData(`/${currentUsername}`, body, "DELETE");
       displayNotification(data.message || "User deleted successfully!");
       clearInputFields();
       clearCurrentUser();
-      fetchUsers();
+      window.location.href = "/users";
     } catch (error) {
       displayNotification(
         "Delete failed: " + (error.message || "Unknown error"),
@@ -233,9 +223,6 @@ function userManagementSystem() {
       );
     }
   });
-
-  // Initial fetch
-  fetchUsers();
 }
 
 //navbar
@@ -267,7 +254,7 @@ const navLogin = () => {
   const loginBtn = document.querySelector("#loginButton");
   if (!loginBtn) return;
   loginBtn.addEventListener("click", function () {
-    window.location.href = "/login";
+    window.location.href = "/users";
   });
 };
 
@@ -280,12 +267,10 @@ const homeSection1Refresh = function () {
   paginationButton.addEventListener("click", function (e) {
     e.preventDefault();
     const url = this.getAttribute("href"); // get the href attribute
-    console.log("Refreshing page with URL:", url);
 
     // fetch the data
     fetch(`${url}`)
       .then((response) => {
-        console.log(response);
         if (!response.ok) {
           throw new Error("Network response was not ok " + response.statusText);
         }
@@ -592,16 +577,6 @@ const wordPageNounsModifyTable = function () {
     const definitePlural = $("#definitePlural").val();
     const example = $("#old-example").val();
 
-    console.log(
-      wordId,
-      english,
-      indefiniteSingular,
-      definiteSingular,
-      indefinitePlural,
-      definitePlural,
-      example
-    );
-
     // Send updated data to the server
     try {
       const response = await fetch(`/word/update-word/${wordId}`, {
@@ -623,7 +598,7 @@ const wordPageNounsModifyTable = function () {
 
       if (response.ok) {
         alert(result.message);
-        location.reload(); // Optionally, reload the page to see the updated data
+        location.reload(); // reload the page to see the updated data
       } else {
         alert("Error updating the word: " + result.error);
       }
