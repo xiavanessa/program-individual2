@@ -42,7 +42,6 @@ router.post("/register", async (req, res) => {
 
 // Login user
 router.post("/login", async (req, res) => {
-  console.log("recieved login request");
   const { username, password } = req.body;
 
   const query = `SELECT * FROM Users WHERE username = ?`;

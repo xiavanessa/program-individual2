@@ -357,7 +357,7 @@ body {
   display: flex;
   justify-content: center;
   background-color: var(--color-primary);
-  margin-top: 10%;
+  margin-top: 2%;
   color: var(--color-quaternary);
 }
 
