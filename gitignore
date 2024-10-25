@@ -1,3 +1,4 @@
 node_modules;
 bootstrap;
-package - lock.json.sqlite3.env;
+package - lock.json
+.env
